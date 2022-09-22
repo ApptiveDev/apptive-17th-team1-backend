@@ -27,30 +27,12 @@ public class QuestionController {
     @RequestMapping(value = "/question/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> QuestionApi(@PathVariable Long id) {
 
-        // db에서 id값으로 question 찾기
-        Question question = questionService.findOne(id).orElseGet(() -> new Question());
+        String result = questionService.JsonQuestionById(id);
 
-        // question id가 null 값일때 404 에러 반환
-        if (question.getId() == null) {
+        // null 값일때 404반환
+        if (result == "null") {
             return ResponseEntity.notFound().build();
         }
-
-        // question obj to hashmap (column 중 option에 저장된 string을 list로 변환하기 위함)
-        ObjectMapper objectMapper = new ObjectMapper();
-        LinkedHashMap<String, Object> map = objectMapper.convertValue(question, LinkedHashMap.class);
-
-        // question의 종류에 따른 option 반환여부 결정
-        if (question.getForm() == 2) {
-            ArrayList<String> optionList = new ArrayList<>(Arrays.asList(question.getOption().orElse("").split(",")));
-            map.remove("option");
-            map.put("option", optionList);
-        } else {
-            map.remove("option");
-        }
-
-        // hashmap to json string
-        Gson gson = new Gson();
-        String result = gson.toJson(map);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
