@@ -1,4 +1,4 @@
-package com.example.wineapi.repository;
+package com.example.wineapi.data.repository;
 
 import com.example.wineapi.domain.Question;
 

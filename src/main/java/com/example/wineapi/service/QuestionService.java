@@ -3,15 +3,13 @@ package com.example.wineapi.service;
 import com.example.wineapi.domain.Question;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.wineapi.repository.QuestionRepository;
+import com.example.wineapi.data.repository.QuestionRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.Optional;
 
 @Transactional
 @Service

@@ -1,6 +1,6 @@
 package com.example.wineapi;
 
-import com.example.wineapi.repository.QuestionRepository;
+import com.example.wineapi.data.repository.QuestionRepository;
 import com.example.wineapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
