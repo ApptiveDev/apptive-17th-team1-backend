@@ -1,17 +1,17 @@
 package com.example.wineapi.service;
 
-import com.example.wineapi.domain.Question;
+import com.example.wineapi.data.domain.Question;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.springframework.http.ResponseEntity;
+import com.example.wineapi.data.domain.QuestionOption;
+import com.example.wineapi.data.dto.QuestionDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.wineapi.repository.QuestionRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.Optional;
+import java.util.List;
 
 @Transactional
 @Service
@@ -23,14 +23,14 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public String JsonQuestionById(Long id) {
+    public QuestionDto JsonQuestionById(Integer id) {
 
         // db에서 id값으로 question 찾기
-        Question question = questionRepository.findById(id).orElseGet(() -> new Question());
+        QuestionDto question = new QuestionDto(questionRepository.findById(id).orElseGet(() -> new Question()));
 
         // question id가 null 값일때
         if (question.getId() == null) {
-            return "null";
+            return null;
         }
 
         // question obj to hashmap (column 중 option에 저장된 string을 list로 변환하기 위함)
@@ -38,8 +38,12 @@ public class QuestionService {
         LinkedHashMap<String, Object> map = objectMapper.convertValue(question, LinkedHashMap.class);
 
         // question의 종류에 따른 option 반환여부 결정
-        if (question.getForm() == 2) {
-            ArrayList<String> optionList = new ArrayList<>(Arrays.asList(question.getOption().orElse("").split(",")));
+        if (question.getAnswerFormat() == "리커드") {
+            List<QuestionOption> qoList = questionRepository.findByQuestionOption(question.getIndex());
+            ArrayList<String> optionList = new ArrayList<>();
+            for (QuestionOption option : qoList) {
+                question.getQuestion_option().add(option.getChoice());
+            }
             map.remove("option");
             map.put("option", optionList);
         } else {
@@ -49,6 +53,28 @@ public class QuestionService {
         // hashmap to json string
         Gson gson = new Gson();
         String result = gson.toJson(map);
-        return result;
+        return question;
+    }
+
+    public ArrayList<QuestionDto> QuestionDtoByCategory(String category) {
+        ArrayList<Question> questionArrayList = questionRepository.findByCategory(category);
+        ArrayList<QuestionDto> questionDtoArrayList = new ArrayList<>();
+        for (int i = 0; i < questionArrayList.size(); i++) {
+            QuestionDto questionDto = new QuestionDto(questionArrayList.get(i));
+
+            // question의 종류에 따른 option 반환여부 결정
+            if (questionDto.getAnswerFormat().equals("객관식")) {
+                List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getIndex());
+                ArrayList<QuestionOption> optionList = new ArrayList<>();
+                optionList.addAll(qoList);
+                System.out.println(optionList.size());
+                for (int j = 0; j < optionList.size(); j++) {
+                    questionDto.getQuestion_option().add(optionList.get(j).getChoice());
+                }
+            }
+            questionDtoArrayList.add(questionDto);
+        }
+
+        return questionDtoArrayList;
     }
 }
