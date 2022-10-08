@@ -5,7 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-## application ##
+# application.yml
 .yml
 
 ### STS ###
