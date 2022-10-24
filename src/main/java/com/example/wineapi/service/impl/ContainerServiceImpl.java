@@ -7,6 +7,8 @@ import com.example.wineapi.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ContainerServiceImpl implements ContainerService {
     private final ContainerDAO containerDAO;
@@ -42,8 +44,16 @@ public class ContainerServiceImpl implements ContainerService {
         return containerResponseDTO;
     }
 
+    public List<Long> getMyContainers(Long user_id) {
+        List<Long> li = containerDAO.selectMyContainers(user_id);
+        if(li==null)
+            return null;
+
+        return li;
+    }
+
     @Override
-    public void deleteContainer(Long id) throws Exception {
-        containerDAO.deleteContainer(id);
+    public void deleteContainer(Long user_id, Long wine_id){
+        containerDAO.deleteContainer(user_id, wine_id);
     }
 }
