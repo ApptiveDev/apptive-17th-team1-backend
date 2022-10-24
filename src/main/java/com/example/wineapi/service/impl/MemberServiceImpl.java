@@ -41,4 +41,24 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMember(Long id) throws Exception {
         memberDAO.deleteMember(id);
     }
+
+    public boolean login(MemberDTO memberDTO) {
+        Member member = memberDAO.loginCheck(memberDTO.getEmail(), memberDTO.getPass());
+        if(member == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean isDuplicated(String email) {
+        if (memberDAO.findByEmail(email) == null){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 }
