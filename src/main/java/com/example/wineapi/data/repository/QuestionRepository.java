@@ -2,6 +2,7 @@ package com.example.wineapi.data.repository;
 
 import com.example.wineapi.data.domain.Question;
 import com.example.wineapi.data.domain.QuestionOption;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,7 +14,7 @@ import java.util.Optional;
 public class QuestionRepository {
     private final EntityManager em;
 
-
+    @Autowired
     public QuestionRepository(EntityManager em) {
         this.em = em;
     }

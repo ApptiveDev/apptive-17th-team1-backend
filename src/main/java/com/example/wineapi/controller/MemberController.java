@@ -20,7 +20,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping()
+    @RequestMapping(value = "/createMember", method = RequestMethod.POST)
     public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
         if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -30,8 +30,8 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
     }
 
-    @GetMapping()
-    public ResponseEntity<MemberDTO> getMember(Long id) { //id로 회원 검색 xxx
+    @GetMapping("/getMember/{id}")
+    public ResponseEntity<MemberDTO> getMember(@PathVariable Long id) { //id로 회원 검색 xxx
         MemberDTO memberResponseDTO = memberService.getMember(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
