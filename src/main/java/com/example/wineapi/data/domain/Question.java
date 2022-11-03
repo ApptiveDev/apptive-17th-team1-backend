@@ -1,6 +1,7 @@
 package com.example.wineapi.data.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "question")
