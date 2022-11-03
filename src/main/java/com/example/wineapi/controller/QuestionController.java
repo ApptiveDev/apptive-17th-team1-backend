@@ -1,8 +1,6 @@
 package com.example.wineapi.controller;
 
-import com.example.wineapi.domain.Question;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+import com.example.wineapi.data.dto.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import com.example.wineapi.service.QuestionService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 @RestController
 public class QuestionController {
@@ -24,16 +19,22 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @RequestMapping(value = "/question/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> QuestionApi(@PathVariable Long id) {
+    @RequestMapping(value = "/questionn/{id}", method = RequestMethod.GET)
+    public ResponseEntity<QuestionDto> QuestionApi(@PathVariable Integer id) {
 
-        String result = questionService.JsonQuestionById(id);
+        QuestionDto result = questionService.JsonQuestionById(id);
 
-        // null 값일때 404반환
-        if (result == "null") {
-            return ResponseEntity.notFound().build();
-        }
+//        // null 값일때 404반환
+//        if (result.getId() == null) {
+//            return ResponseEntity.notFound().build();
+//        }
 
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/question/{category}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") String category) {
+        ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

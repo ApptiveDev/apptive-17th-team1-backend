@@ -26,4 +26,5 @@ public class SpringConfig {
     public QuestionRepository questionRepository() {
         return new QuestionRepository(em);
     }
+
 }
