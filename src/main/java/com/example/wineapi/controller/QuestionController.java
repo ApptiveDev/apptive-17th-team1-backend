@@ -32,8 +32,8 @@ public class QuestionController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/question/{category}", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") String category) {
+    @RequestMapping(value = "/question/category/{category}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") Integer category) {
         ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

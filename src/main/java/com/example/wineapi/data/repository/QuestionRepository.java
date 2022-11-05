@@ -27,16 +27,16 @@ public class QuestionRepository {
                 .stream().findAny();
     }
 
-    public ArrayList<Question> findByCategory(String category) {
+    public ArrayList<Question> findByCategory(Integer category) {
         ArrayList<Question> result = new ArrayList<>();
         result.addAll(em.createQuery("select m from Question m where m.category = :category", Question.class)
                 .setParameter("category", category)
                 .getResultList());
         return result;
     }
-    public List<QuestionOption> findByQuestionOption(Integer questionIndex) {
-        return em.createQuery("select m from QuestionOption m where m.questionIndex = :questionIndex", QuestionOption.class)
-                .setParameter("questionIndex", questionIndex)
+    public List<QuestionOption> findByQuestionOption(Integer questionId) {
+        return em.createQuery("select m from QuestionOption m where m.questionId = :questionId", QuestionOption.class)
+                .setParameter("questionId", questionId)
                 .getResultList();
     }
 

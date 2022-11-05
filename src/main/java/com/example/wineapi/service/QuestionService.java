@@ -40,8 +40,8 @@ public class QuestionService {
         LinkedHashMap<String, Object> map = objectMapper.convertValue(question, LinkedHashMap.class);
 
         // question의 종류에 따른 option 반환여부 결정
-        if (question.getAnswerFormat() == "리커드") {
-            List<QuestionOption> qoList = questionRepository.findByQuestionOption(question.getIndex());
+        if (question.getAnswerFormat() == 1) {
+            List<QuestionOption> qoList = questionRepository.findByQuestionOption(question.getId());
             ArrayList<String> optionList = new ArrayList<>();
             for (QuestionOption option : qoList) {
                 question.getQuestion_option().add(option.getChoice());
@@ -58,15 +58,15 @@ public class QuestionService {
         return question;
     }
 
-    public ArrayList<QuestionDto> QuestionDtoByCategory(String category) {
+    public ArrayList<QuestionDto> QuestionDtoByCategory(Integer category) {
         ArrayList<Question> questionArrayList = questionRepository.findByCategory(category);
         ArrayList<QuestionDto> questionDtoArrayList = new ArrayList<>();
         for (int i = 0; i < questionArrayList.size(); i++) {
             QuestionDto questionDto = new QuestionDto(questionArrayList.get(i));
 
             // question의 종류에 따른 option 반환여부 결정
-            if (questionDto.getAnswerFormat().equals("객관식")) {
-                List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getIndex());
+            if (questionDto.getAnswerFormat().equals(1)) {
+                List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getId());
                 ArrayList<QuestionOption> optionList = new ArrayList<>();
                 optionList.addAll(qoList);
                 System.out.println(optionList.size());
