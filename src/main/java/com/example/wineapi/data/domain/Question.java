@@ -8,11 +8,9 @@ import java.util.List;
 public class Question {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private int question_index; // 질문 식별 번호
-    private String category; // 질문 대분류
-    private String answerFormat;   // 질문 형식
+    private Integer id;
+    private Integer category; // 질문 대분류
+    private Integer answerFormat;   // 질문 형식
     private String context;  // 질문 형태
 
     public Integer getId() {
@@ -23,27 +21,19 @@ public class Question {
         this.id = id;
     }
 
-    public Integer getIndex() {
-        return question_index;
-    }
-
-    public void setIndex(Integer index) {
-        this.question_index = index;
-    }
-
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 
-    public String getAnswerFormat() {
+    public Integer getAnswerFormat() {
         return answerFormat;
     }
 
-    public void setAnswerFormat(String answerFormat) {
+    public void setAnswerFormat(Integer answerFormat) {
         this.answerFormat = answerFormat;
     }
 

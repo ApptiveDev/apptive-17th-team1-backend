@@ -8,8 +8,8 @@ public class QuestionOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int questionIndex;
+    private Integer id;
+    private Integer questionId;
     private String choice;
 
     public Integer getId() {
@@ -20,12 +20,12 @@ public class QuestionOption {
         this.id = id;
     }
 
-    public Integer getQuestionIndex() {
-        return questionIndex;
+    public Integer getQuestionId() {
+        return questionId;
     }
 
-    public void setQuestionIndex(Integer questionIndex) {
-        this.questionIndex = questionIndex;
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
     }
 
     public String getChoice() {

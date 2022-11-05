@@ -6,16 +6,14 @@ import java.util.ArrayList;
 
 public class QuestionDto {
     private Integer id;
-    private Integer index; // 질문 식별 번호
-    private String category; // 질문 대분류
-    private String answerFormat;   // 질문 형식
+    private Integer category; // 질문 대분류
+    private Integer answerFormat;   // 질문 형식
     private String context;  // 질문 형태
     private ArrayList<String> question_option;
 
 
     public QuestionDto(Question question) {
         this.id = question.getId();
-        this.index = question.getIndex();
         this.category = question.getCategory();
         this.answerFormat = question.getAnswerFormat();
         this.context = question.getContext();
@@ -30,27 +28,19 @@ public class QuestionDto {
         this.id = id;
     }
 
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 
-    public String getAnswerFormat() {
+    public Integer getAnswerFormat() {
         return answerFormat;
     }
 
-    public void setAnswerFormat(String answerFormat) {
+    public void setAnswerFormat(Integer answerFormat) {
         this.answerFormat = answerFormat;
     }
 
@@ -69,5 +59,4 @@ public class QuestionDto {
     public void setQuestion_option(ArrayList<String> question_option) {
         this.question_option = question_option;
     }
-
 }
