@@ -1,7 +1,7 @@
 package com.example.wineapi.data.repository;
 
-import com.example.wineapi.data.entity.question.Question;
-import com.example.wineapi.data.entity.question.QuestionOption;
+import com.example.wineapi.data.domain.Question;
+import com.example.wineapi.data.domain.QuestionOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

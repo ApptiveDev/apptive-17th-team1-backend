@@ -1,7 +1,7 @@
 package com.example.wineapi.data.dao.Impl;
 
 import com.example.wineapi.data.dao.MemberDAO;
-import com.example.wineapi.data.entity.member.Member;
+import com.example.wineapi.data.entity.Member;
 import com.example.wineapi.data.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

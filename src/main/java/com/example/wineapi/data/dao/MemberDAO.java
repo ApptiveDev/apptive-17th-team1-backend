@@ -1,6 +1,7 @@
 package com.example.wineapi.data.dao;
 
-import com.example.wineapi.data.entity.member.Member;
+import com.example.wineapi.data.dto.MemberDTO;
+import com.example.wineapi.data.entity.Member;
 
 public interface MemberDAO {
     Member insertMember(Member member);

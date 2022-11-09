@@ -2,7 +2,7 @@ package com.example.wineapi.service.impl;
 
 import com.example.wineapi.data.dao.MemberDAO;
 import com.example.wineapi.data.dto.MemberDTO;
-import com.example.wineapi.data.entity.member.Member;
+import com.example.wineapi.data.entity.Member;
 import com.example.wineapi.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

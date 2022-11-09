@@ -1,7 +1,9 @@
 package com.example.wineapi.data.dao.Impl;
 
 import com.example.wineapi.data.dao.ContainerDAO;
-import com.example.wineapi.data.entity.member.Container;
+import com.example.wineapi.data.dto.ContainerDTO;
+import com.example.wineapi.data.entity.Container;
+import com.example.wineapi.data.entity.Member;
 import com.example.wineapi.data.repository.ContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ContainerDAOImpl implements ContainerDAO {
