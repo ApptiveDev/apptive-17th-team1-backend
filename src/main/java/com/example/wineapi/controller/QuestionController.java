@@ -21,6 +21,8 @@ public class QuestionController {
 
     @RequestMapping(value = "/question/category/{category}", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") Integer category) {
+        if (category > 3) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
