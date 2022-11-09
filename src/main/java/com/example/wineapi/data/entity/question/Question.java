@@ -1,4 +1,4 @@
-package com.example.wineapi.data.domain;
+package com.example.wineapi.data.entity.question;
 
 import javax.persistence.*;
 import java.util.List;

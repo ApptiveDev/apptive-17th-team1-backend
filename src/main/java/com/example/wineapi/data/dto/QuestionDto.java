@@ -1,6 +1,6 @@
 package com.example.wineapi.data.dto;
 
-import com.example.wineapi.data.domain.Question;
+import com.example.wineapi.data.entity.question.Question;
 
 import java.util.ArrayList;
 
