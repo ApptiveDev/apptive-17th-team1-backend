@@ -1,7 +1,7 @@
 package com.example.wineapi.service;
 
-import com.example.wineapi.data.domain.Question;
-import com.example.wineapi.data.domain.QuestionOption;
+import com.example.wineapi.data.entity.question.Question;
+import com.example.wineapi.data.entity.question.QuestionOption;
 import com.example.wineapi.data.dto.QuestionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
