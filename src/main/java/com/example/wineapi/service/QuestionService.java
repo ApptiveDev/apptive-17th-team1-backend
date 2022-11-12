@@ -67,7 +67,7 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto(questionArrayList.get(i));
 
             // question의 종류에 따른 option 반환여부 결정
-            if (questionDto.getAnswerFormat().equals(1)) {
+            if (questionDto.getAnswerFormat().equals(2)) {
                 List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getId());
                 ArrayList<QuestionOption> optionList = new ArrayList<>();
                 optionList.addAll(qoList);
