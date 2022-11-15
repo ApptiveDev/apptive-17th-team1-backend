@@ -2,29 +2,36 @@ package com.example.wineapi.controller;
 
 import com.example.wineapi.data.dto.MemberDTO;
 import com.example.wineapi.data.entity.Member;
-import com.example.wineapi.service.JWTService;
+import com.example.wineapi.data.repository.UserRepository;
+import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import com.example.wineapi.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
-//    @PersistenceContext
-//    private EntityManager em;
-//    @Autowired
-//    JWTService jwtService;
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtAuthenticationProvider jwtAuthenticationProvider;
+
 
     @Autowired
     public MemberController(MemberService memberService) {
@@ -67,26 +74,57 @@ public class MemberController {
 //        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("fail");
 //    }
 
-//    @PostMapping("/login")
-//    public Member signInAuth(@RequestBody HashMap<String, String> loginInfo, HttpServletResponse response)  {
-//        System.out.println("[+] Login authentication from Android");
+    @PostMapping("/join")
+    public void join(@RequestBody MemberDTO memberDTO){
+        userRepository.save(Member.builder()
+                .email(memberDTO.getEmail())
+                .pass(passwordEncoder.encode(memberDTO.getPass()))
+                .roles(Collections.singletonList("ROLE_USER"))
+                .build());
+
+    }
+
+    @PostMapping("/login")
+    public MemberDTO login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
+        //System.out.println("ddddddddddddddddddddddddddddddddddddddddd" + memberDTO);
+        Member member = userRepository.findByEmail(memberDTO.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+        //System.out.println();
+        if (!passwordEncoder.matches(memberDTO.getPass(), member.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
+        String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles());
+        response.setHeader("X-AUTH-TOKEN", token);
+        System.out.println("토큰ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ" + token);
+        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        response.addCookie(cookie);
+
+        MemberDTO m = new MemberDTO(member.getEmail(), member.getPass());
+
+        return m;
+    }
+
+    @PostMapping("/logout")
+    public void logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("X-AUTH-TOKEN", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+//    @GetMapping("/info")
+//    public MemberDTO getInfo(){
+//        Object details = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if(details != null && !(details instanceof  String)) {
 //
-//        System.out.println("[+] id: " + loginInfo.get("email") + ", password: " + loginInfo.get("pass") + ", AutoLogin: " + loginInfo.get("AutoLogin"));
-//        List<Member> list = em.createQuery("select m from Member m where m.email =: email and m.pass =: pass ", Member.class)
-//                .setParameter("email", loginInfo.get("email"))
-//                .setParameter("pass", loginInfo.get("pass"))
-//                .getResultList();
-//        if(list.size() > 0) {
-//            System.out.println("[+] Login Success");
-//            System.out.println(list.get(0).toString());
-//            String token = jwtService.createToken(list.get(0), loginInfo.get("AutoLogin"));
-//            System.out.println("token: " + token);
-//            response.setHeader("jwt-token", token);
-//
-//            return list.get(0);
-//        }else {
-//            System.out.println("[+] Login Failed");
-//            return null;
+//            return new MemberDTO((Member) details);
 //        }
+//        return null;
 //    }
 }
