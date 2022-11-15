@@ -1,6 +1,6 @@
 package com.example.wineapi.service;
 
-import com.example.wineapi.data.dto.ContainerDTO;
+import com.example.wineapi.data.dto.member.ContainerDTO;
 
 import java.util.List;
 

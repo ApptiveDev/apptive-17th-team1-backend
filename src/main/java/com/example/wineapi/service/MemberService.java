@@ -1,6 +1,6 @@
 package com.example.wineapi.service;
 
-import com.example.wineapi.data.dto.MemberDTO;
+import com.example.wineapi.data.dto.member.MemberDTO;
 
 public interface MemberService {
     MemberDTO saveMember(MemberDTO memberDTO);

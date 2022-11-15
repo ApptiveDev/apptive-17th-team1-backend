@@ -1,6 +1,6 @@
 package com.example.wineapi.controller;
 
-import com.example.wineapi.data.dto.MemberDTO;
+import com.example.wineapi.data.dto.member.MemberDTO;
 import com.example.wineapi.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

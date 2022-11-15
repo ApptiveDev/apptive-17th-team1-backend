@@ -1,6 +1,6 @@
 package com.example.wineapi.controller;
 
-import com.example.wineapi.data.dto.QuestionDto;
+import com.example.wineapi.data.dto.question.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

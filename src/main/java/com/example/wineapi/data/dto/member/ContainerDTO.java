@@ -1,4 +1,4 @@
-package com.example.wineapi.data.dto;
+package com.example.wineapi.data.dto.member;
 
 public class ContainerDTO {
     private Long user_id;

@@ -1,4 +1,4 @@
-package com.example.wineapi.data.dto;
+package com.example.wineapi.data.dto.member;
 
 public class MemberDTO {
     private String email;

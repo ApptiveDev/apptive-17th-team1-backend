@@ -1,4 +1,4 @@
-package com.example.wineapi.data.dto;
+package com.example.wineapi.data.dto.question;
 
 import com.example.wineapi.data.entity.question.Question;
 
