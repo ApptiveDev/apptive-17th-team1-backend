@@ -1,4 +1,4 @@
-package com.example.wineapi;
+package com.example.wineapi.config;
 
 import com.example.wineapi.data.repository.QuestionRepository;
 import com.example.wineapi.service.QuestionService;
