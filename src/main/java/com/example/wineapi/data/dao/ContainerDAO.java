@@ -1,7 +1,7 @@
 package com.example.wineapi.data.dao;
 
 
-import com.example.wineapi.data.entity.Container;
+import com.example.wineapi.data.entity.member.Container;
 
 import java.util.List;
 

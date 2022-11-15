@@ -1,4 +1,4 @@
-package com.example.wineapi.data.entity;
+package com.example.wineapi.data.entity.member;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

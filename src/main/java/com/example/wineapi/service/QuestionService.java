@@ -1,7 +1,7 @@
 package com.example.wineapi.service;
 
-import com.example.wineapi.data.domain.Question;
-import com.example.wineapi.data.domain.QuestionOption;
+import com.example.wineapi.data.entity.question.Question;
+import com.example.wineapi.data.entity.question.QuestionOption;
 import com.example.wineapi.data.dto.QuestionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+// original_2
 
 @Transactional
 @Service
@@ -65,7 +67,7 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto(questionArrayList.get(i));
 
             // question의 종류에 따른 option 반환여부 결정
-            if (questionDto.getAnswerFormat().equals(1)) {
+            if (questionDto.getAnswerFormat().equals(2)) {
                 List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getId());
                 ArrayList<QuestionOption> optionList = new ArrayList<>();
                 optionList.addAll(qoList);
