@@ -1,6 +1,6 @@
 package com.example.wineapi.service.impl;
 
-import com.example.wineapi.data.entity.Member;
+import com.example.wineapi.data.entity.member.Member;
 import com.example.wineapi.data.repository.MemberRepository;
 import com.example.wineapi.data.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
