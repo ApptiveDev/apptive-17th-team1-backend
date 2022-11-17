@@ -51,7 +51,7 @@ public class ContainerDAOImpl implements ContainerDAO {
                 .setParameter("user_id", user_id)
                 .setParameter("wine_id", wine_id)
                 .getResultList();
-        if(li!=null) {
+        if(li.size() != 0) {
             containerRepository.delete(li.get(0));
         }
     }
