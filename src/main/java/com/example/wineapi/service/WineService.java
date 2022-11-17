@@ -17,7 +17,7 @@ public class WineService {
     }
 
     public WineDto wineDtoById(Long id) {
-        WineDto wineDto = new WineDto(wineRepository.findById(id).orElse(new Wine()));
+        WineDto wineDto = new WineDto(wineRepository.findWineById(id).orElse(new Wine()));
         return wineDto;
     }
 }
