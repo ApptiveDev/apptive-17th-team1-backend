@@ -19,7 +19,7 @@ public class ContainerController {
         this.containerService = containerService;
     }
 
-    @PostMapping()
+    @PostMapping("/createContainer")
     public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
         //애초에 창고는 is_like를 true로 시작한다. 이후에 false로 바뀌면 db에서 삭제.
         //창고에서 삭제는 user_id, wine_id를 받아 해당하는 값 삭제
