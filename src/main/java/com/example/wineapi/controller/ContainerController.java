@@ -19,18 +19,16 @@ public class ContainerController {
         this.containerService = containerService;
     }
 
+
     @PostMapping("/createContainer")
     public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
         //애초에 창고는 is_like를 true로 시작한다. 이후에 false로 바뀌면 db에서 삭제.
         //창고에서 삭제는 user_id, wine_id를 받아 해당하는 값 삭제
         // true로 왔을 때는 바로 저장, false가 오면 있는 db 삭제해야함
         ContainerDTO containerResponseDTO = null;
-        if (containerDTO.getIs_like()) { //db바로 삽입
-            containerResponseDTO = containerService.saveContainer(containerDTO);
-        }
-        else { //같은 db삭제, 없는 거 삭제시 예외 처리 아직
-            containerService.deleteContainer(containerDTO.getUser_id(), containerDTO.getWine_id());
-        }
+
+        containerService.deleteContainer(containerDTO.getUser_id(), containerDTO.getWine_id());
+        containerResponseDTO = containerService.saveContainer(containerDTO);
 
         //null이 리턴되면 삭제
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
