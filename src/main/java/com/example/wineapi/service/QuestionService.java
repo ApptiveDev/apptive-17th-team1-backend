@@ -14,12 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.wineapi.data.repository.QuestionRepository;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Random;
 
-// original_2
+import java.util.*;
 
 @Transactional
 @Service
@@ -27,6 +23,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final WineRepository wineRepository;
+
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, WineRepository wineRepository) {
@@ -89,16 +86,35 @@ public class QuestionService {
         return questionDtoArrayList;
     }
 
-    public WineDto recommendWine(AnswerDto answerDto) {
-        ArrayList<WineDto> wineDtoList = new ArrayList<>();
-        ArrayList<Wine> wineList = wineRepository.allWineList();
+    public WineDto findSimilarWineDto(AnswerDto answerDto) {
+        // answerDto parameters
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("sugar", "tannin", "body", "carbonicAcid",
+                                                                    "smell", "mood", "pairing", "variety", "country",
+                                                                    "type", "alcohol"));
+        // answerDto parameter values
+        ArrayList<Integer> parameter_values = new ArrayList<>(Arrays.asList(answerDto.getSugar(),
+                answerDto.getTannin(), answerDto.getBody(), answerDto.getCarbonicAcid(), answerDto.getSmell(),
+                answerDto.getMood(), answerDto.getPairing(), answerDto.getVariety(), answerDto.getCountry(),
+                answerDto.getType(), answerDto.getAlcohol()));
 
-        for (Wine wine : wineList) {
-            wineDtoList.add(new WineDto(wine));
+        // make query string
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("select m from Wine m where m.sugar = " + parameter_values.get(0));
+        String query = stringBuffer.toString();
+        String previous = new String();
+
+        List<Wine> wineList = wineRepository.wineListByQuery(query);
+
+        for (int i = 1; i < parameters.size() && !wineList.isEmpty(); i++) {
+            previous = stringBuffer.toString();
+
+            stringBuffer.append(" and m." + parameters.get(i) + " = " + parameter_values.get(i));
+            query = stringBuffer.toString();
+            wineList = wineRepository.wineListByQuery(query);
         }
-
         Random random = new Random();
-        int randomIndex = random.nextInt(wineDtoList.size());
-        return wineDtoList.get(randomIndex);
+        wineList = wineRepository.wineListByQuery(previous);
+        int randonInt = random.nextInt(wineList.size());
+        return new WineDto(wineList.get(randonInt));
     }
 }

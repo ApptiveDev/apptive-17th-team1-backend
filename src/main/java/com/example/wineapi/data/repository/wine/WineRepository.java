@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,10 +28,7 @@ public class WineRepository {
                 .stream().findAny();
     }
 
-    public ArrayList<Wine> allWineList() {
-        ArrayList<Wine> result = new ArrayList<>();
-        result.addAll(em.createQuery("select m from Wine m", Wine.class)
-                .getResultList());
-        return result;
+    public List<Wine> wineListByQuery(String query) {
+        return em.createQuery(query, Wine.class).getResultList();
     }
 }

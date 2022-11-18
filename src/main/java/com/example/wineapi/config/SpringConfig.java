@@ -24,13 +24,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public WineRepository wineRepository() {
-        return new WineRepository(em);
+    public QuestionRepository questionRepository() {
+        return new QuestionRepository(em);
     }
 
     @Bean
-    public QuestionRepository questionRepository() {
-        return new QuestionRepository(em);
+    public WineRepository wineRepository() {
+        return new WineRepository(em);
     }
 
 }

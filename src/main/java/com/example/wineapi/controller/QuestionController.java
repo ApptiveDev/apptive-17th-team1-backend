@@ -12,6 +12,7 @@ import com.example.wineapi.service.QuestionService;
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping(value = "/question")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -21,16 +22,20 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @RequestMapping(value = "/question/category/{category}", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<QuestionDto>> questionByCategory(@PathVariable("category") Integer category) {
+
+    @RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") Integer category) {
+
         if (category > 3) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         
         ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/question/answer", method = RequestMethod.POST)
-//    public ResponseEntity<WineDto> recommendWineByAnswer(@RequestBody AnswerDto answerDto) {
-//
-//    }
+    @RequestMapping(value = "/answer")
+    public ResponseEntity<WineDto> recommendWine(@RequestBody AnswerDto answerDto) {
+        WineDto result = questionService.findSimilarWineDto(answerDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
