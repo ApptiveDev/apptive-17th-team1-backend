@@ -22,8 +22,10 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+
     @RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") Integer category) {
+
         if (category > 3) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         
         ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
@@ -35,4 +37,5 @@ public class QuestionController {
         WineDto result = questionService.findSimilarWineDto(answerDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
 }
