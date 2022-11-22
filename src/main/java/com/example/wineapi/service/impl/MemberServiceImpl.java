@@ -24,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member savedMember = memberDAO.insertMember(member);
 
-        MemberDTO memberResponseDTO = new MemberDTO(savedMember.getEmail(), savedMember.getPass());
+        MemberDTO memberResponseDTO = new MemberDTO(savedMember.getEmail(), savedMember.getPass(), savedMember.getName(), savedMember.getGender(), savedMember.getAge());
         return memberResponseDTO;
     }
 
@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO getMember(Long id) {
         Member member = memberDAO.selectMember(id);
 
-        MemberDTO memberResponseDTO = new MemberDTO(member.getEmail(), member.getPass());
+        MemberDTO memberResponseDTO = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
         return memberResponseDTO;
     }
