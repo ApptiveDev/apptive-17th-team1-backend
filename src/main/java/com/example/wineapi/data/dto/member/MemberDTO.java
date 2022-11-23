@@ -63,6 +63,9 @@ public class MemberDTO {
         return "MemberDTO{" +
                 "email='" + email + '\'' +
                 ", pass='" + pass + '\'' +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
                 '}';
     }
 }

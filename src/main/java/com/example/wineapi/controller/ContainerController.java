@@ -3,7 +3,9 @@ package com.example.wineapi.controller;
 
 import com.example.wineapi.data.dto.member.ContainerDTO;
 import com.example.wineapi.data.dto.wine.WineDto;
+import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import com.example.wineapi.service.ContainerService;
+import com.example.wineapi.service.MemberService;
 import com.example.wineapi.service.WineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +17,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/container")
 public class ContainerController {
+    private final MemberService memberService;
     private final ContainerService containerService;
     private final WineService wineService;
 
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+
     @Autowired
-    public ContainerController(ContainerService containerService, WineService wineService) {
+    public ContainerController(MemberService memberService, ContainerService containerService, WineService wineService, JwtAuthenticationProvider jwtAuthenticationProvider) {
+        this.memberService = memberService;
         this.containerService = containerService;
         this.wineService = wineService;
+        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
     }
 
     @PostMapping("/createContainer")
@@ -36,27 +43,24 @@ public class ContainerController {
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<ContainerDTO> getContainer(Long id) {
-        System.out.println("시작ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ");
-
+    @GetMapping("/get/{id}")
+    public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id) {
         ContainerDTO containerResponseDTO = containerService.getContainer(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/myContainers") //user_id를 기반으로 나만의 창고를 검색
-    public ResponseEntity<List<WineDto>> getMyContainers(Long user_id) { //사용자의 id를 전달
-        System.out.println("시작ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ");
-        List<Long> li = containerService.getMyContainers(user_id); // 사용자
-        System.out.println("출력ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ");
+    @GetMapping("/myContainers") //user_id를 기반으로 나만의 창고를 검색 -> 헤더 토큰에서 jwtprovide으로
+    public ResponseEntity<List<WineDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
+        System.out.println(req);
+        String email = jwtAuthenticationProvider.getUserPk(req);
+        // 이메일의 id 위치 찾기
+        Long user_id = memberService.getId(email);
+        List<Long> li = containerService.getMyContainers(user_id); //
         if(li==null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        //return ResponseEntity.status(HttpStatus.OK).body(li);
+        System.out.println(li);
 
-        //***********************************************
-        //여기에 추가로 wine에 매핑 시킨 리스트을 리턴 해줘야함.
-        //***********************************************
         List<WineDto> result = null;
         for(int i=0; i<li.size(); i++) {
             result.add(wineService.wineDtoById(Long.valueOf(i)));

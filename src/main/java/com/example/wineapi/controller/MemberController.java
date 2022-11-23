@@ -1,5 +1,6 @@
 package com.example.wineapi.controller;
 
+import com.example.wineapi.data.dto.member.LoginDTO;
 import com.example.wineapi.data.entity.member.Member;
 import com.example.wineapi.data.repository.UserRepository;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
@@ -62,8 +63,8 @@ public class MemberController {
 
     // 아이디중복여부를 판단하는 컨트롤러 추가 고려!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    @DeleteMapping("/deleteMember")
-    public ResponseEntity<String> deleteMember(Long id) throws Exception { // xxx
+    @DeleteMapping("/deleteMember/{id}")
+    public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception { // xxx
         memberService.deleteMember(id);
         
         return ResponseEntity.status(HttpStatus.OK).body("삭제");
@@ -72,6 +73,9 @@ public class MemberController {
 
     @PostMapping("/join") //회원가입 중복체크
     public void join(@RequestBody MemberDTO memberDTO){
+        if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
+            return;
+        }
         userRepository.save(Member.builder()
                 .email(memberDTO.getEmail())
                 .pass(passwordEncoder.encode(memberDTO.getPass()))
@@ -84,21 +88,20 @@ public class MemberController {
     }
 
     @PostMapping("/login") //로그인 시 이메일, 비번만 JSON으로 줘도됨
-    public MemberDTO login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
-        Member member = userRepository.findByEmail(memberDTO.getEmail())
+    public MemberDTO login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
+        Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-        if (!passwordEncoder.matches(memberDTO.getPass(), member.getPassword())) {
+        if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-
-        String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles());
+        System.out.println("토큰 생성 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles()); //토큰 생성 -> 입력을 회원 ID로 바꿔야 수월
         response.setHeader("X-AUTH-TOKEN", token);
         Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         response.addCookie(cookie);
-
         MemberDTO m = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
         return m;

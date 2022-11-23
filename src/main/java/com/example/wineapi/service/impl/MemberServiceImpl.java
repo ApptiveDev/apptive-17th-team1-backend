@@ -21,6 +21,9 @@ public class MemberServiceImpl implements MemberService {
         Member member = new Member();
         member.setEmail(memberDTO.getEmail());
         member.setPass(memberDTO.getPass());
+        member.setGender(memberDTO.getGender());
+        member.setName(memberDTO.getName());
+        member.setAge(memberDTO.getAge());
 
         Member savedMember = memberDAO.insertMember(member);
 
@@ -35,6 +38,10 @@ public class MemberServiceImpl implements MemberService {
         MemberDTO memberResponseDTO = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
         return memberResponseDTO;
+    }
+
+    public Long getId(String email) {
+        return memberDAO.selectId(email);
     }
 
     @Override

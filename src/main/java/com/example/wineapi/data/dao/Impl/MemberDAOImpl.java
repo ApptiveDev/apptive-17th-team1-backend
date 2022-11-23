@@ -31,9 +31,15 @@ public class MemberDAOImpl implements MemberDAO {
     @Override
     public Member selectMember(Long id) {
         Member selectMember = memberRepository.getById(id);
-        System.out.print("다음 동작 잘 작동하나?");
 
         return selectMember;
+    }
+
+    @Override
+    public Long selectId(String email) {
+        return  em.createQuery("select m.id from Member m where m.email =: email", Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
 
     @Override

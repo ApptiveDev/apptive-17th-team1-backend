@@ -39,6 +39,7 @@ public class JwtAuthenticationProvider {
 
     // JWT 토큰 생성
     public String createToken(String userPk, List<String> roles) {
+        System.out.println(userPk + "dddddddddddddddddddddddddddddddddddddddddddddddddddd");
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
         claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
@@ -64,9 +65,11 @@ public class JwtAuthenticationProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        String token = null;
-        Cookie cookie = WebUtils.getCookie(request, "X-AUTH-TOKEN");
-        if(cookie != null) token = cookie.getValue();
+        String token = request.getHeader("X-AUTH-TOKEN");
+        //System.out.println("토큰에 들어 있는 유저 정보 : " + getUserPk(token));
+//        Cookie cookie = WebUtils.getCookie(request, "X-AUTH-TOKEN");
+//        if(cookie != null) token = cookie.getValue();
+
         return token;
     }
 
