@@ -1,5 +1,6 @@
 package com.example.wineapi.controller;
 
+import com.example.wineapi.data.dto.member.LoginDTO;
 import com.example.wineapi.data.entity.member.Member;
 import com.example.wineapi.data.repository.UserRepository;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
@@ -9,22 +10,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
-import java.util.Map;
+
 
 @Slf4j
 @RestController
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -38,6 +37,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    // join으로 구현 해놓음 굳이 사용안해도 될듯....
     @RequestMapping(value = "/createMember", method = RequestMethod.POST)
     public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
         if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
@@ -48,62 +48,61 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
     }
 
-    @GetMapping("/getMember/{id}")
+    @GetMapping("/getMember/{id}") //없을 때 구현 아직
     public ResponseEntity<MemberDTO> getMember(@PathVariable Long id) { //id로 회원 검색 xxx
         MemberDTO memberResponseDTO = memberService.getMember(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
     }
+
+    @GetMapping("/isDuplicated/{email}")
+    public ResponseEntity<Boolean> isDuplicated(@PathVariable String email) { //id로 회원 검색 xxx
+        boolean check = memberService.isDuplicated(email);
+        return ResponseEntity.status(HttpStatus.OK).body(check);
+    }
+
+    // 아이디중복여부를 판단하는 컨트롤러 추가 고려!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    @DeleteMapping()
-    public ResponseEntity<String> deleteMember(Long id) throws Exception { // xxx
+    @DeleteMapping("/deleteMember/{id}")
+    public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception { // xxx
         memberService.deleteMember(id);
         
         return ResponseEntity.status(HttpStatus.OK).body("삭제");
     }
 
-//    @PostMapping("/login") //리턴으로 무엇을 줘야지??? 세션 값???
-//    public ResponseEntity<String> login(@ModelAttribute MemberDTO memberDTO, HttpServletRequest request) {
-//        HttpSession session;
-//        if(memberService.login(memberDTO)) { //이메일, 비밀번호 일치시
-//            session = request.getSession(); // 세션 생성
-//            session.setAttribute("member", memberDTO.getEmail());
-//            //System.out.print(session.getAttribute("member"));
-//            return ResponseEntity.status(HttpStatus.OK).body("success");
-//        }
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("fail");
-//    }
 
-    @PostMapping("/join")
+    @PostMapping("/join") //회원가입 중복체크
     public void join(@RequestBody MemberDTO memberDTO){
+        if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
+            return;
+        }
         userRepository.save(Member.builder()
                 .email(memberDTO.getEmail())
                 .pass(passwordEncoder.encode(memberDTO.getPass()))
+                .name(memberDTO.getName())
+                .gender(memberDTO.getGender())
+                .age(memberDTO.getAge())
                 .roles(Collections.singletonList("ROLE_USER"))
                 .build());
 
     }
 
-    @PostMapping("/login")
-    public MemberDTO login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
-        //System.out.println("ddddddddddddddddddddddddddddddddddddddddd" + memberDTO);
-        Member member = userRepository.findByEmail(memberDTO.getEmail())
+    @PostMapping("/login") //로그인 시 이메일, 비번만 JSON으로 줘도됨
+    public MemberDTO login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
+        Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-        //System.out.println();
-        if (!passwordEncoder.matches(memberDTO.getPass(), member.getPassword())) {
+        if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-
-        String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles());
+        System.out.println("토큰 생성 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles()); //토큰 생성 -> 입력을 회원 ID로 바꿔야 수월
         response.setHeader("X-AUTH-TOKEN", token);
-        System.out.println("토큰ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ" + token);
         Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         response.addCookie(cookie);
-
-        MemberDTO m = new MemberDTO(member.getEmail(), member.getPass());
+        MemberDTO m = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
         return m;
     }

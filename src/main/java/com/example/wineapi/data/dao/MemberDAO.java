@@ -5,6 +5,7 @@ import com.example.wineapi.data.entity.member.Member;
 public interface MemberDAO {
     Member insertMember(Member member);
     Member selectMember(Long id);
+    Long selectId(String email);
     void deleteMember(Long id) throws Exception;
 
     Member loginCheck(String email, String pass);

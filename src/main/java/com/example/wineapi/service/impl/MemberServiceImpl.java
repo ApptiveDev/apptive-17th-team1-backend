@@ -21,10 +21,13 @@ public class MemberServiceImpl implements MemberService {
         Member member = new Member();
         member.setEmail(memberDTO.getEmail());
         member.setPass(memberDTO.getPass());
+        member.setGender(memberDTO.getGender());
+        member.setName(memberDTO.getName());
+        member.setAge(memberDTO.getAge());
 
         Member savedMember = memberDAO.insertMember(member);
 
-        MemberDTO memberResponseDTO = new MemberDTO(savedMember.getEmail(), savedMember.getPass());
+        MemberDTO memberResponseDTO = new MemberDTO(savedMember.getEmail(), savedMember.getPass(), savedMember.getName(), savedMember.getGender(), savedMember.getAge());
         return memberResponseDTO;
     }
 
@@ -32,9 +35,13 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO getMember(Long id) {
         Member member = memberDAO.selectMember(id);
 
-        MemberDTO memberResponseDTO = new MemberDTO(member.getEmail(), member.getPass());
+        MemberDTO memberResponseDTO = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
         return memberResponseDTO;
+    }
+
+    public Long getId(String email) {
+        return memberDAO.selectId(email);
     }
 
     @Override
