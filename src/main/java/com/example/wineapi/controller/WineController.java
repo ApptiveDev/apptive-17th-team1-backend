@@ -19,7 +19,7 @@ public class WineController {
         this.wineService = wineService;
     }
 
-    @RequestMapping(value = "/wine/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/wine/id/v1/{id}", method = RequestMethod.GET)
     public ResponseEntity<WineDto> wineById(@PathVariable Long id) {
         WineDto wineDto = wineService.wineDtoById(id);
         if (wineDto.getId() == 0) {

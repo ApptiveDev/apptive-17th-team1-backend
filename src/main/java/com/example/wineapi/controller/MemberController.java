@@ -37,6 +37,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+
 //    @GetMapping("/getMember/{id}")
 //    public ResponseEntity<MemberDTO> getMember(@PathVariable Long id) {
 //        MemberDTO memberResponseDTO = memberService.getMember(id);
@@ -54,10 +55,10 @@ public class MemberController {
     }
 
 
-    /**eHDtKSMS RLSMD*/
-    @PostMapping("/join") //회원가입 중복체크 -> 로그인 필요 x
+    /** 회원가입 */
+    @PostMapping("/join/v1")
     public void join(@RequestBody MemberDTO memberDTO){
-        if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
+        if(memberService.isDuplicated(memberDTO.getEmail())) { // 이메일 중복시
             return;
         }
         userRepository.save(Member.builder()
@@ -70,7 +71,8 @@ public class MemberController {
                 .build());
     }
 
-    @PostMapping("/login") //로그인 시 이메일, 비번만 JSON으로 줘도됨 -> 로그인 필요 x
+
+    @PostMapping("/login/v1") //로그인 시 이메일, 비번만 JSON으로 줘도됨 -> 로그인 필요 x
     public MemberDTO login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
@@ -90,7 +92,7 @@ public class MemberController {
         return m;
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/logout/v1")
     public void logout(HttpServletResponse response){
         Cookie cookie = new Cookie("X-AUTH-TOKEN", null);
         cookie.setHttpOnly(true);

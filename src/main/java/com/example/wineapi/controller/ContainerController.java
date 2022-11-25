@@ -32,6 +32,7 @@ public class ContainerController {
     }
 
 
+
     @PostMapping("/createContainer/v1") //창고 생성
 
     public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
@@ -45,12 +46,13 @@ public class ContainerController {
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/getContainer/v1/{id}") // 확인용. 필요하지는 않은듯
+    @GetMapping("/getContainer/v1/{id}") // 서버 내수용, 문서 작업하지말것
     public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id) {
         ContainerDTO containerResponseDTO = containerService.getContainer(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
+
 
     @GetMapping("/getMyContainers/v1") //user_id를 기반으로 나만의 창고를 검색
     public ResponseEntity<List<WineDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
@@ -66,7 +68,8 @@ public class ContainerController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-    @DeleteMapping("/deleteMyContainer") //xxx
+    
+    @DeleteMapping("/deleteMyContainer")
     public ResponseEntity<String> deleteMyContainer(Long user_id, Long wine_id) throws Exception {
         containerService.deleteContainer(user_id, wine_id);
         return null;
