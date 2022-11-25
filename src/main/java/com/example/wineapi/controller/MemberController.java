@@ -37,41 +37,25 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    // join으로 구현 해놓음 굳이 사용안해도 될듯....
-    @RequestMapping(value = "/createMember", method = RequestMethod.POST)
-    public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
-        if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
-        MemberDTO memberResponseDTO = memberService.saveMember(memberDTO); //처음이면 회원
+//    @GetMapping("/getMember/{id}")
+//    public ResponseEntity<MemberDTO> getMember(@PathVariable Long id) {
+//        MemberDTO memberResponseDTO = memberService.getMember(id);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
+//    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
-    }
 
-    @GetMapping("/getMember/{id}") //없을 때 구현 아직
-    public ResponseEntity<MemberDTO> getMember(@PathVariable Long id) { //id로 회원 검색 xxx
-        MemberDTO memberResponseDTO = memberService.getMember(id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
-    }
-
-    @GetMapping("/isDuplicated/{email}")
-    public ResponseEntity<Boolean> isDuplicated(@PathVariable String email) { //id로 회원 검색 xxx
-        boolean check = memberService.isDuplicated(email);
-        return ResponseEntity.status(HttpStatus.OK).body(check);
-    }
-
-    // 아이디중복여부를 판단하는 컨트롤러 추가 고려!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
+    // TODO
     @DeleteMapping("/deleteMember/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception { // xxx
+    public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception {
         memberService.deleteMember(id);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body("삭제");
     }
 
 
-    @PostMapping("/join") //회원가입 중복체크
+    /**eHDtKSMS RLSMD*/
+    @PostMapping("/join") //회원가입 중복체크 -> 로그인 필요 x
     public void join(@RequestBody MemberDTO memberDTO){
         if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
             return;
@@ -84,10 +68,9 @@ public class MemberController {
                 .age(memberDTO.getAge())
                 .roles(Collections.singletonList("ROLE_USER"))
                 .build());
-
     }
 
-    @PostMapping("/login") //로그인 시 이메일, 비번만 JSON으로 줘도됨
+    @PostMapping("/login") //로그인 시 이메일, 비번만 JSON으로 줘도됨 -> 로그인 필요 x
     public MemberDTO login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
@@ -97,11 +80,11 @@ public class MemberController {
         System.out.println("토큰 생성 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles()); //토큰 생성 -> 입력을 회원 ID로 바꿔야 수월
         response.setHeader("X-AUTH-TOKEN", token);
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
+//        cookie.setPath("/");
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+//        response.addCookie(cookie);
         MemberDTO m = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
         return m;
@@ -116,14 +99,4 @@ public class MemberController {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
-
-//    @GetMapping("/info")
-//    public MemberDTO getInfo(){
-//        Object details = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if(details != null && !(details instanceof  String)) {
-//
-//            return new MemberDTO((Member) details);
-//        }
-//        return null;
-//    }
 }
