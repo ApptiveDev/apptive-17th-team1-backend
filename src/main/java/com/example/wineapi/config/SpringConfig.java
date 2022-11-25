@@ -1,6 +1,7 @@
 package com.example.wineapi.config;
 
 import com.example.wineapi.data.repository.QuestionRepository;
+import com.example.wineapi.data.repository.wine.WineRepository;
 import com.example.wineapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,17 @@ public class SpringConfig {
 
     @Bean
     public QuestionService memberService() {
-        return new QuestionService(questionRepository());
+        return new QuestionService(questionRepository(), wineRepository());
     }
 
     @Bean
     public QuestionRepository questionRepository() {
         return new QuestionRepository(em);
+    }
+
+    @Bean
+    public WineRepository wineRepository() {
+        return new WineRepository(em);
     }
 
 }

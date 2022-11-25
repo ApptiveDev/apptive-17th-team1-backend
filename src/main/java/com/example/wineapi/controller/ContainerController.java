@@ -31,7 +31,9 @@ public class ContainerController {
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
     }
 
+
     @PostMapping("/createContainer/v1") //창고 생성
+
     public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
         // user_id, wine_id 중복된거 무조건 삭제 후 새로운 데이터 삽입
         ContainerDTO containerResponseDTO = null;

@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Component
+@Component  // 응아니야
 public class ContainerDAOImpl implements ContainerDAO {
     private final ContainerRepository containerRepository;
 

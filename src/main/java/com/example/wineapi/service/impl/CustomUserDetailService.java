@@ -1,6 +1,5 @@
 package com.example.wineapi.service.impl;
 
-
 import com.example.wineapi.data.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
