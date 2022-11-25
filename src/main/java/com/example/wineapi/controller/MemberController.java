@@ -38,7 +38,7 @@ public class MemberController {
     }
 
     // join으로 구현 해놓음 굳이 사용안해도 될듯....
-    @RequestMapping(value = "/createMember", method = RequestMethod.POST)
+    @RequestMapping(value = "/createMember/v1", method = RequestMethod.POST)
     public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
         if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -48,14 +48,14 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
     }
 
-    @GetMapping("/getMember/{id}") //없을 때 구현 아직
+    @GetMapping("/getMember/v1/{id}") //없을 때 구현 아직
     public ResponseEntity<MemberDTO> getMember(@PathVariable Long id) { //id로 회원 검색 xxx
         MemberDTO memberResponseDTO = memberService.getMember(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
     }
 
-    @GetMapping("/isDuplicated/{email}")
+    @GetMapping("/isDuplicated/v1/{email}")
     public ResponseEntity<Boolean> isDuplicated(@PathVariable String email) { //id로 회원 검색 xxx
         boolean check = memberService.isDuplicated(email);
         return ResponseEntity.status(HttpStatus.OK).body(check);
@@ -63,7 +63,7 @@ public class MemberController {
 
     // 아이디중복여부를 판단하는 컨트롤러 추가 고려!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    @DeleteMapping("/deleteMember/{id}")
+    @DeleteMapping("/deleteMember/v1/{id}")
     public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception { // xxx
         memberService.deleteMember(id);
         
@@ -71,7 +71,7 @@ public class MemberController {
     }
 
 
-    @PostMapping("/join") //회원가입 중복체크
+    @PostMapping("/join/v1") //회원가입 중복체크
     public void join(@RequestBody MemberDTO memberDTO){
         if(memberService.isDuplicated(memberDTO.getEmail())) { //이메일 중복시
             return;
@@ -87,7 +87,7 @@ public class MemberController {
 
     }
 
-    @PostMapping("/login") //로그인 시 이메일, 비번만 JSON으로 줘도됨
+    @PostMapping("/login/v1") //로그인 시 이메일, 비번만 JSON으로 줘도됨
     public MemberDTO login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
@@ -107,7 +107,7 @@ public class MemberController {
         return m;
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/logout/v1")
     public void logout(HttpServletResponse response){
         Cookie cookie = new Cookie("X-AUTH-TOKEN", null);
         cookie.setHttpOnly(true);

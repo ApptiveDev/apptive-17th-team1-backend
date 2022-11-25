@@ -32,7 +32,7 @@ public class ContainerController {
     }
 
 
-    @PostMapping("/createContainer")
+    @PostMapping("/createContainer/v1")
     public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
         // user_id, wine_id 중복된거 무조건 삭제 후 새로운 데이터 삽입
         ContainerDTO containerResponseDTO = null;
@@ -44,14 +44,14 @@ public class ContainerController {
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/get/v1/{id}")
     public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id) {
         ContainerDTO containerResponseDTO = containerService.getContainer(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/myContainers") //user_id를 기반으로 나만의 창고를 검색 -> 헤더 토큰에서 jwtprovide으로
+    @GetMapping("/myContainers/v1") //user_id를 기반으로 나만의 창고를 검색 -> 헤더 토큰에서 jwtprovide으로
     public ResponseEntity<List<WineDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
         System.out.println(req);
         String email = jwtAuthenticationProvider.getUserPk(req);
