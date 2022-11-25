@@ -31,7 +31,7 @@ public class ContainerController {
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
     }
 
-    @PostMapping("/createContainer")
+    @PostMapping("/createContainer/v1") //창고 생성
     public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
         // user_id, wine_id 중복된거 무조건 삭제 후 새로운 데이터 삽입
         ContainerDTO containerResponseDTO = null;
@@ -43,44 +43,30 @@ public class ContainerController {
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/getContainer/v1/{id}") // 확인용. 필요하지는 않은듯
     public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id) {
         ContainerDTO containerResponseDTO = containerService.getContainer(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
-    @GetMapping("/myContainers") //user_id를 기반으로 나만의 창고를 검색 -> 헤더 토큰에서 jwtprovide으로
+    @GetMapping("/getMyContainers/v1") //user_id를 기반으로 나만의 창고를 검색
     public ResponseEntity<List<WineDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
-        System.out.println(req);
         String email = jwtAuthenticationProvider.getUserPk(req);
-        // 이메일의 id 위치 찾기
         Long user_id = memberService.getId(email);
         List<Long> li = containerService.getMyContainers(user_id); //
         if(li==null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        System.out.println(li);
 
         List<WineDto> result = null;
         for(int i=0; i<li.size(); i++) {
             result.add(wineService.wineDtoById(Long.valueOf(i)));
         }
         return ResponseEntity.status(HttpStatus.OK).body(result);
-
-
-
     }
-//  delete는 굳이 ... 창고에 넣을 때 자동으로 삭제하는 기능 구현함
-//    @DeleteMapping()//xxx
-//    public ResponseEntity<String> deleteContainer(Long id) throws Exception {
-//        //containerService.deleteContainer(id);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body("정삭 삭제");
-//    }
-//
-//    @DeleteMapping("/deleteMyContainer") //xxx
-//    public ResponseEntity<String> deleteMyContainer(Long user_id, Long wine_id) throws Exception {
-//        //containerService.deleteMyContainer(user_id, wine_id);
-//        return null;
-//    }
+    @DeleteMapping("/deleteMyContainer") //xxx
+    public ResponseEntity<String> deleteMyContainer(Long user_id, Long wine_id) throws Exception {
+        containerService.deleteContainer(user_id, wine_id);
+        return null;
+    }
 }
