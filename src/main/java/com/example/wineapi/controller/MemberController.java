@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 
@@ -46,12 +47,19 @@ public class MemberController {
 //    }
 
 
-    // TODO
-    @DeleteMapping("/deleteMember/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception {
-        memberService.deleteMember(id);
+    @DeleteMapping("/deleteMember/v1")
+    public ResponseEntity<String> deleteMember(HttpServletRequest request) throws Exception {
+        String token = request.getHeader("X-AUTH-TOKEN");
 
-        return ResponseEntity.status(HttpStatus.OK).body("삭제");
+        if (token != null) {
+            String userEmail = jwtAuthenticationProvider.getUserPk(token);
+            Long userId = memberService.getId(userEmail);
+            memberService.deleteMember(userId);
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot find member");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("delete success");
     }
 
 
