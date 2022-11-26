@@ -1,24 +1,21 @@
 package com.example.wineapi.data.dto.member;
 
+import com.example.wineapi.data.entity.member.Container;
+
 public class ContainerDTO {
-    private Long user_id;
     private Long wine_id;
     private boolean is_like;
 
 
 
     public ContainerDTO(Long user_id, Long wine_id, boolean is_like) {
-        this.user_id = user_id;
         this.wine_id = wine_id;
         this.is_like = is_like;
     }
 
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public ContainerDTO(Container container) {
+        this.wine_id = container.getWine_id();
+        this.is_like = container.getIs_like();
     }
 
     public Long getWine_id() {
@@ -35,14 +32,5 @@ public class ContainerDTO {
 
     public void setIs_like(boolean is_like) {
         this.is_like = is_like;
-    }
-
-    @Override
-    public String toString() {
-        return "ContainerDTO{" +
-                "user_id=" + user_id +
-                ", wine_id=" + wine_id +
-                ", is_like=" + is_like +
-                '}';
     }
 }

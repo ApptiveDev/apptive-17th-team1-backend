@@ -54,7 +54,8 @@ public class QuestionController {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
             ContainerDTO containerDTO = new ContainerDTO(userId, result.getId(), false);
-            containerService.saveContainer(containerDTO);
+            containerService.deleteContainer(userId, result.getId());
+            containerService.saveContainer(userId ,containerDTO);
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);

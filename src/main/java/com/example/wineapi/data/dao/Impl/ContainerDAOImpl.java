@@ -36,8 +36,8 @@ public class ContainerDAOImpl implements ContainerDAO {
         return selectContainer;
     }
 
-    public List<Long> selectMyContainers(Long user_id) {
-        List<Long> li = em.createQuery("select c.wine_id from Container c where c.user_id =: user_id")
+    public List<Container> selectMyContainers(Long user_id) {
+        List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id")
                 .setParameter("user_id", user_id)
                 .getResultList();
         if (li.size() == 0)
