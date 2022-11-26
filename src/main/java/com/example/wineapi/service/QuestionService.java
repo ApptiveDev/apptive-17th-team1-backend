@@ -1,14 +1,13 @@
 package com.example.wineapi.service;
 
 import com.example.wineapi.data.dto.question.AnswerDto;
+import com.example.wineapi.data.dto.question.QuestionDto;
 import com.example.wineapi.data.dto.wine.WineDto;
 import com.example.wineapi.data.entity.question.Question;
 import com.example.wineapi.data.entity.question.QuestionOption;
-import com.example.wineapi.data.dto.question.QuestionDto;
+import com.example.wineapi.data.dto.question.MultipleChoiceQuestionDto;
 import com.example.wineapi.data.entity.wine.Wine;
 import com.example.wineapi.data.repository.wine.WineRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,47 +30,16 @@ public class QuestionService {
         this.wineRepository = wineRepository;
     }
 
-    public QuestionDto JsonQuestionById(Integer id) {
-
-        // db에서 id값으로 question 찾기
-        QuestionDto questionDto = new QuestionDto(questionRepository.findById(id).orElseGet(() -> new Question()));
-
-        // question id가 null 값일때
-        if (questionDto.getId() == null) {
-            return null;
-        }
-
-        // question obj to hashmap (column 중 option에 저장된 string을 list로 변환하기 위함)
-        ObjectMapper objectMapper = new ObjectMapper();
-        LinkedHashMap<String, Object> map = objectMapper.convertValue(questionDto, LinkedHashMap.class);
-
-        // question의 종류에 따른 option 반환여부 결정
-        if (questionDto.getAnswerFormat() == 1) {
-            List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getId());
-            ArrayList<String> optionList = new ArrayList<>();
-            for (QuestionOption option : qoList) {
-                questionDto.getQuestion_option().add(option.getChoice());
-            }
-            map.remove("option");
-            map.put("option", optionList);
-        } else {
-            map.remove("option");
-        }
-
-        // hashmap to json string
-        Gson gson = new Gson();
-        String result = gson.toJson(map);
-        return questionDto;
-    }
-
     public ArrayList<QuestionDto> QuestionDtoByCategory(Integer category) {
-        ArrayList<Question> questionArrayList = questionRepository.findByCategory(category);
+        ArrayList<Question> questionArrayList = questionRepository.findQuestionByCategory(category);
         ArrayList<QuestionDto> questionDtoArrayList = new ArrayList<>();
         for (int i = 0; i < questionArrayList.size(); i++) {
-            QuestionDto questionDto = new QuestionDto(questionArrayList.get(i));
-
-            // question의 종류에 따른 option 반환여부 결정
-            if (questionDto.getAnswerFormat().equals(2)) {
+            Question question = questionArrayList.get(i);
+            if (question.getAnswerFormat() == 1) {
+                QuestionDto questionDto = new QuestionDto(question);
+                questionDtoArrayList.add(questionDto);
+            } else {
+                MultipleChoiceQuestionDto questionDto = new MultipleChoiceQuestionDto(question);
                 List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getId());
                 ArrayList<QuestionOption> optionList = new ArrayList<>();
                 optionList.addAll(qoList);
@@ -79,8 +47,9 @@ public class QuestionService {
                 for (int j = 0; j < optionList.size(); j++) {
                     questionDto.getQuestion_option().add(optionList.get(j).getChoice());
                 }
+
+                questionDtoArrayList.add(questionDto);
             }
-            questionDtoArrayList.add(questionDto);
         }
 
         return questionDtoArrayList;
@@ -114,7 +83,7 @@ public class QuestionService {
         }
         Random random = new Random();
         wineList = wineRepository.wineListByQuery(previous);
-        int randonInt = random.nextInt(wineList.size());
-        return new WineDto(wineList.get(randonInt));
+        int randomInt = random.nextInt(wineList.size());
+        return new WineDto(wineList.get(randomInt));
     }
 }
