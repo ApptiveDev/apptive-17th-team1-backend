@@ -1,6 +1,7 @@
 package com.example.wineapi.controller;
 
 
+import com.example.wineapi.data.dto.container.ContainerViewDto;
 import com.example.wineapi.data.dto.member.ContainerDTO;
 import com.example.wineapi.data.dto.wine.WineDto;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -19,31 +21,13 @@ import java.util.List;
 public class ContainerController {
     private final MemberService memberService;
     private final ContainerService containerService;
-    private final WineService wineService;
-
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Autowired
-    public ContainerController(MemberService memberService, ContainerService containerService, WineService wineService, JwtAuthenticationProvider jwtAuthenticationProvider) {
+    public ContainerController(MemberService memberService, ContainerService containerService, JwtAuthenticationProvider jwtAuthenticationProvider) {
         this.memberService = memberService;
         this.containerService = containerService;
-        this.wineService = wineService;
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
-    }
-
-
-
-    @PostMapping("/createContainer/v1") //창고 생성
-
-    public ResponseEntity<ContainerDTO> createContainer(@RequestBody ContainerDTO containerDTO) {
-        // user_id, wine_id 중복된거 무조건 삭제 후 새로운 데이터 삽입
-        ContainerDTO containerResponseDTO = null;
-
-        containerService.deleteContainer(containerDTO.getUser_id(), containerDTO.getWine_id());
-        containerResponseDTO = containerService.saveContainer(containerDTO);
-
-        //null이 리턴되면 삭제
-        return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
     }
 
     @GetMapping("/getContainer/v1/{id}") // 서버 내수용, 문서 작업하지말것
@@ -54,24 +38,42 @@ public class ContainerController {
     }
 
 
-    @GetMapping("/getMyContainers/v1") //user_id를 기반으로 나만의 창고를 검색
-    public ResponseEntity<List<WineDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
+    @GetMapping("/getContainers/v1") //user_id를 기반으로 나만의 창고를 검색
+    public ResponseEntity<List<ContainerViewDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
         String email = jwtAuthenticationProvider.getUserPk(req);
         Long user_id = memberService.getId(email);
-        List<Long> li = containerService.getMyContainers(user_id); //
-        if(li==null)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        List<ContainerViewDto> result = containerService.getMyContainers(user_id); //
+        if(result == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 
-        List<WineDto> result = null;
-        for(int i=0; i<li.size(); i++) {
-            result.add(wineService.wineDtoById(Long.valueOf(i)));
-        }
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @PostMapping("/modifyContainer/v1")
+    public ResponseEntity<ContainerDTO> modifyContainer(@RequestBody ContainerDTO containerDTO, HttpServletRequest request) {
+        String token = request.getHeader("X-AUTH-TOKEN");
+
+        if (token != null) {
+            String userEmail = jwtAuthenticationProvider.getUserPk(token);
+            Long userId = memberService.getId(userEmail);
+            containerService.deleteContainer(userId, containerDTO.getWine_id());
+            ContainerDTO result = containerService.saveContainer(userId, containerDTO);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
     
-    @DeleteMapping("/deleteMyContainer")
-    public ResponseEntity<String> deleteMyContainer(Long user_id, Long wine_id) throws Exception {
-        containerService.deleteContainer(user_id, wine_id);
-        return null;
+    @DeleteMapping("/deleteContainer/v1/{wineId}")
+    public ResponseEntity<String> deleteMyContainer(@PathVariable("wineId") Long wineId, HttpServletRequest request) throws Exception {
+        String token = request.getHeader("X-AUTH-TOKEN");
+
+        if (token != null) {
+            String userEmail = jwtAuthenticationProvider.getUserPk(token);
+            Long userId = memberService.getId(userEmail);
+            containerService.deleteContainer(userId, wineId);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("miss member token", HttpStatus.BAD_REQUEST);
+        }
     }
 }
