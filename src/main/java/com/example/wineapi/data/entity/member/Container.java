@@ -17,6 +17,18 @@ public class Container {
 
     private boolean is_like;
 
+    public Container() {
+        this.user_id = null;
+        this.wine_id = null;
+        this.is_like = false;
+    }
+
+    public Container(Long user_id, Long wine_id, boolean is_like) {
+        this.user_id = user_id;
+        this.wine_id = wine_id;
+        this.is_like = is_like;
+    }
+
     public Long getId() {
         return id;
     }

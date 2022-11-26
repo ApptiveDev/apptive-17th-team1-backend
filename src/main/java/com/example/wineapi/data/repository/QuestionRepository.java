@@ -27,7 +27,7 @@ public class QuestionRepository {
                 .stream().findAny();
     }
 
-    public ArrayList<Question> findByCategory(Integer category) {
+    public ArrayList<Question> findQuestionByCategory(Integer category) {
         ArrayList<Question> result = new ArrayList<>();
         result.addAll(em.createQuery("select m from Question m where m.category = :category", Question.class)
                 .setParameter("category", category)

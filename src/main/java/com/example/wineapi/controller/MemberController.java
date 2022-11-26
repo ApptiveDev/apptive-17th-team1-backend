@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 
@@ -45,16 +46,6 @@ public class MemberController {
 //        return ResponseEntity.status(HttpStatus.OK).body(memberResponseDTO);
 //    }
 
-
-    // TODO
-    @DeleteMapping("/deleteMember/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable Long id) throws Exception {
-        memberService.deleteMember(id);
-
-        return ResponseEntity.status(HttpStatus.OK).body("삭제");
-    }
-
-
     /** 회원가입 */
     @PostMapping("/join/v1")
     public void join(@RequestBody MemberDTO memberDTO){
@@ -71,7 +62,7 @@ public class MemberController {
                 .build());
     }
 
-
+    /** 로그인 */
     @PostMapping("/login/v1") //로그인 시 이메일, 비번만 JSON으로 줘도됨 -> 로그인 필요 x
     public MemberDTO login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
@@ -79,7 +70,6 @@ public class MemberController {
         if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        System.out.println("토큰 생성 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles()); //토큰 생성 -> 입력을 회원 ID로 바꿔야 수월
         response.setHeader("X-AUTH-TOKEN", token);
 //        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
@@ -92,13 +82,19 @@ public class MemberController {
         return m;
     }
 
-    @PostMapping("/logout/v1")
-    public void logout(HttpServletResponse response){
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+    /** 회원 삭제 */
+    @DeleteMapping("/deleteMember/v1")
+    public ResponseEntity<String> deleteMember(HttpServletRequest request) throws Exception {
+        String token = request.getHeader("X-AUTH-TOKEN");
+
+        if (token != null) {
+            String userEmail = jwtAuthenticationProvider.getUserPk(token);
+            Long userId = memberService.getId(userEmail);
+            memberService.deleteMember(userId);
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot find member");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("delete success");
     }
 }
