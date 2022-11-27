@@ -1,6 +1,7 @@
 package com.example.wineapi.controller;
 
 import com.example.wineapi.data.dto.member.LoginDTO;
+import com.example.wineapi.data.dto.member.TokenDTO;
 import com.example.wineapi.data.entity.member.Member;
 import com.example.wineapi.data.repository.UserRepository;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
@@ -66,7 +67,7 @@ public class MemberController {
 
     /** 로그인 */
     @PostMapping("/login/v1") //로그인 시 이메일, 비번만 JSON으로 줘도됨 -> 로그인 필요 x
-    public ResponseEntity<MemberDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
+    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
@@ -79,9 +80,10 @@ public class MemberController {
 //        cookie.setHttpOnly(true);
 //        cookie.setSecure(true);
 //        response.addCookie(cookie);
-        MemberDTO memberDTO = new MemberDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge());
 
-        return new ResponseEntity<>(memberDTO, HttpStatus.OK);
+        TokenDTO tokenDto = new TokenDTO(member.getEmail(), member.getPass(), member.getName(), member.getGender(), member.getAge(), token);
+
+        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }
 
     /** 회원 삭제 */
