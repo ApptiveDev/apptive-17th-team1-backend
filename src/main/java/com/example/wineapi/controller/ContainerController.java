@@ -40,10 +40,14 @@ public class ContainerController {
 
     @GetMapping("/getContainers/v1") //user_id를 기반으로 나만의 창고를 검색
     public ResponseEntity<List<ContainerViewDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
+        if (req == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         String email = jwtAuthenticationProvider.getUserPk(req);
         Long user_id = memberService.getId(email);
-        List<ContainerViewDto> result = containerService.getMyContainers(user_id); //
-        if(result == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        List<ContainerViewDto> result = containerService.getMyContainers(user_id);
+        if (result == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
