@@ -45,6 +45,9 @@ public class QuestionController {
 
     @RequestMapping(value = "/answer/v1")
     public ResponseEntity<WineDto> recommendWine(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
 
         String token = request.getHeader("X-AUTH-TOKEN");
         WineDto result = questionService.findSimilarWineDto(answerDto);
