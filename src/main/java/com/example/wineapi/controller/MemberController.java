@@ -71,7 +71,7 @@ public class MemberController {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles()); //토큰 생성 -> 입력을 회원 ID로 바꿔야 수월
         response.setHeader("X-AUTH-TOKEN", token);
