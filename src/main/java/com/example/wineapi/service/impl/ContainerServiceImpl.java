@@ -46,6 +46,7 @@ public class ContainerServiceImpl implements ContainerService {
         return containerResponseDTO;
     }
 
+    @Override
     public List<ContainerViewDto> getMyContainers(Long user_id) {
         List<Container> li = containerDAO.selectMyContainers(user_id);
         List<ContainerViewDto> result = new ArrayList<>();
@@ -60,5 +61,10 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public void deleteContainer(Long user_id, Long wine_id){
         containerDAO.deleteContainer(user_id, wine_id);
+    }
+
+    @Override
+    public void deleteContainers(Long user_id) {
+        containerDAO.deleteContainers(user_id);
     }
 }
