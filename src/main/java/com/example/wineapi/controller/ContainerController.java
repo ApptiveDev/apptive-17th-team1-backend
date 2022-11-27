@@ -31,7 +31,10 @@ public class ContainerController {
     }
 
     @GetMapping("/getContainer/v1/{id}") // 서버 내수용, 문서 작업하지말것
-    public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id) {
+    public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id, HttpServletRequest request) {
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         ContainerDTO containerResponseDTO = containerService.getContainer(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(containerResponseDTO);
@@ -39,7 +42,10 @@ public class ContainerController {
 
 
     @GetMapping("/getContainers/v1") //user_id를 기반으로 나만의 창고를 검색
-    public ResponseEntity<List<ContainerViewDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req) { //사용자의 id를 전달
+    public ResponseEntity<List<ContainerViewDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req, HttpServletRequest request) { //사용자의 id를 전달
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         String email = jwtAuthenticationProvider.getUserPk(req);
         Long user_id = memberService.getId(email);
         List<ContainerViewDto> result = containerService.getMyContainers(user_id); //
@@ -50,6 +56,10 @@ public class ContainerController {
 
     @PostMapping("/modifyContainer/v1")
     public ResponseEntity<ContainerDTO> modifyContainer(@RequestBody ContainerDTO containerDTO, HttpServletRequest request) {
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         String token = request.getHeader("X-AUTH-TOKEN");
 
         if (token != null) {
@@ -65,6 +75,10 @@ public class ContainerController {
     
     @DeleteMapping("/deleteContainer/v1/{wineId}")
     public ResponseEntity<String> deleteMyContainer(@PathVariable("wineId") Long wineId, HttpServletRequest request) throws Exception {
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid token");
+        }
+
         String token = request.getHeader("X-AUTH-TOKEN");
 
         if (token != null) {

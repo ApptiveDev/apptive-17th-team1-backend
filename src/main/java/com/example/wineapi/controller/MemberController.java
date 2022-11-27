@@ -86,6 +86,9 @@ public class MemberController {
     /** 회원 삭제 */
     @DeleteMapping("/deleteMember/v1")
     public ResponseEntity<String> deleteMember(HttpServletRequest request) throws Exception {
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid token");
+        }
         String token = request.getHeader("X-AUTH-TOKEN");
 
         if (token != null) {

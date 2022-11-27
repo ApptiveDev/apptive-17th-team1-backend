@@ -1,6 +1,7 @@
 package com.example.wineapi.jwt;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,7 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         else if(token != null && !jwtAuthenticationProvider.validateToken(token)) {
-            throw new InvalidParameterException("유효하지 않은 토큰입니다");
+            request.setAttribute("exception", HttpStatus.BAD_REQUEST);
+            //throw new InvalidParameterException("유효하지 않은 토큰입니다");
         }
 
         filterChain.doFilter(request, response);
