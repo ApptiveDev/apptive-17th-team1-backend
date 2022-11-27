@@ -46,10 +46,14 @@ public class ContainerController {
         if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+        if (req == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
         String email = jwtAuthenticationProvider.getUserPk(req);
         Long user_id = memberService.getId(email);
-        List<ContainerViewDto> result = containerService.getMyContainers(user_id); //
-        if(result == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        List<ContainerViewDto> result = containerService.getMyContainers(user_id);
+        if (result == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
