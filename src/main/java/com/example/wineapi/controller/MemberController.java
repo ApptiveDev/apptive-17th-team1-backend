@@ -6,6 +6,7 @@ import com.example.wineapi.data.entity.member.Member;
 import com.example.wineapi.data.repository.UserRepository;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import com.example.wineapi.data.dto.member.MemberDTO;
+import com.example.wineapi.service.ContainerService;
 import com.example.wineapi.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import java.util.Collections;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final ContainerService containerService;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -35,7 +38,8 @@ public class MemberController {
 
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, ContainerService containerService) {
+        this.containerService = containerService;
         this.memberService = memberService;
     }
 
@@ -87,6 +91,7 @@ public class MemberController {
     }
 
     /** 회원 삭제 */
+    // TODO 회원삭제시 창고 삭제
     @DeleteMapping("/deleteMember/v1")
     public ResponseEntity<String> deleteMember(HttpServletRequest request) throws Exception {
         if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
@@ -98,8 +103,9 @@ public class MemberController {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
             memberService.deleteMember(userId);
+            containerService.deleteContainers(userId);
         } else {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot find member");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot find member");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("delete success");

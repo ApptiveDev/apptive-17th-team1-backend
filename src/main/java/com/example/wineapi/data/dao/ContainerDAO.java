@@ -10,5 +10,6 @@ public interface ContainerDAO {
     Container selectContainer(Long id);
     void deleteContainer(Long user_id, Long wine_id);
 
+    void deleteContainers(Long user_id);
     List<Container> selectMyContainers(Long user_id);
 }
