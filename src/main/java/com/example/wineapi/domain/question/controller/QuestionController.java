@@ -1,13 +1,15 @@
 package com.example.wineapi.domain.question.controller;
 
 import com.example.wineapi.domain.container.dto.ContainerDTO;
-import com.example.wineapi.domain.question.service.QuestionService;
-import com.example.wineapi.domain.question.dto.AnswerDto;
-import com.example.wineapi.domain.question.dto.QuestionDto;
-import com.example.wineapi.domain.wine.dto.WineDto;
-import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import com.example.wineapi.domain.container.service.ContainerServiceImpl;
 import com.example.wineapi.domain.member.service.MemberServiceImpl;
+import com.example.wineapi.domain.question.dto.AnswerDto;
+import com.example.wineapi.domain.question.dto.QuestionDto;
+import com.example.wineapi.domain.question.service.QuestionService;
+import com.example.wineapi.domain.wine.dto.WineDto;
+import com.example.wineapi.global.error.ErrorCode;
+import com.example.wineapi.global.error.exception.CustomException;
+import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class QuestionController {
     @RequestMapping(value = "/category/v1/{category}", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") Integer category) {
 
-        if (category > 3) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (category > 3) throw new CustomException(ErrorCode.QUESTION_NOT_FOUND);
         
         ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -45,8 +47,8 @@ public class QuestionController {
 
     @RequestMapping(value = "/answer/v1")
     public ResponseEntity<WineDto> recommendWine(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
-        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");

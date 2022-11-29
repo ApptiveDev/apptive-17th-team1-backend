@@ -5,6 +5,8 @@ import com.example.wineapi.domain.container.dto.ContainerDTO;
 import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.service.ContainerService;
 import com.example.wineapi.domain.member.service.MemberService;
+import com.example.wineapi.global.error.ErrorCode;
+import com.example.wineapi.global.error.exception.CustomException;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,7 @@ public class ContainerController {
     @GetMapping("/getContainer/v1/{id}") // 서버 내수용, 문서 작업하지말것
     public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id, HttpServletRequest request) {
         if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
         ContainerDTO containerResponseDTO = containerService.getContainer(id);
 
@@ -40,15 +42,16 @@ public class ContainerController {
 
 
     @GetMapping("/getContainers/v1")
-    public ResponseEntity<List<ContainerViewDto>> getMyContainers(@RequestHeader("X-AUTH-TOKEN") String req, HttpServletRequest request) {
-        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    public ResponseEntity<List<ContainerViewDto>> getMyContainers(HttpServletRequest request) {
+        if (request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
-        if (req == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        String token = request.getHeader("X-AUTH-TOKEN");
+        if (token == null) {
+            throw new CustomException(ErrorCode.TOKEN_MISS);
         }
 
-        String email = jwtAuthenticationProvider.getUserPk(req);
+        String email = jwtAuthenticationProvider.getUserPk(token);
         Long user_id = memberService.getId(email);
         List<ContainerViewDto> result = containerService.getMyContainers(user_id);
 
@@ -57,8 +60,8 @@ public class ContainerController {
 
     @PostMapping("/modifyContainer/v1")
     public ResponseEntity<ContainerDTO> modifyContainer(@RequestBody ContainerDTO containerDTO, HttpServletRequest request) {
-        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");
@@ -70,14 +73,14 @@ public class ContainerController {
             ContainerDTO result = containerService.saveContainer(userId, containerDTO);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.TOKEN_MISS);
         }
     }
     
     @DeleteMapping("/deleteContainer/v1/{wineId}")
     public ResponseEntity<String> deleteMyContainer(@PathVariable("wineId") Long wineId, HttpServletRequest request) throws Exception {
         if (request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid token");
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");
@@ -88,7 +91,7 @@ public class ContainerController {
             containerService.deleteContainer(userId, wineId);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("miss member token", HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.TOKEN_MISS);
         }
     }
 }
