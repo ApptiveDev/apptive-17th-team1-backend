@@ -1,11 +1,11 @@
 package com.example.wineapi.domain.container.controller;
 
 
-import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.dto.ContainerDTO;
-import com.example.wineapi.jwt.JwtAuthenticationProvider;
+import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.service.ContainerService;
 import com.example.wineapi.domain.member.service.MemberService;
+import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +51,6 @@ public class ContainerController {
         String email = jwtAuthenticationProvider.getUserPk(req);
         Long user_id = memberService.getId(email);
         List<ContainerViewDto> result = containerService.getMyContainers(user_id);
-        if (result == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

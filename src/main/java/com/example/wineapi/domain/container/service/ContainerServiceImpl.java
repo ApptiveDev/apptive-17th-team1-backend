@@ -1,9 +1,10 @@
 package com.example.wineapi.domain.container.service;
 
 import com.example.wineapi.domain.container.dao.ContainerDAO;
-import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.dto.ContainerDTO;
+import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.entity.Container;
+import com.example.wineapi.domain.wine.dto.WineDto;
 import com.example.wineapi.domain.wine.service.WineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,8 @@ public class ContainerServiceImpl implements ContainerService {
         List<ContainerViewDto> result = new ArrayList<>();
         for (int i = 0; i < li.size(); i++) {
             Container container = li.get(i);
-            result.add(new ContainerViewDto(wineService.wineDtoById(container.getWine_id()), container));
+            WineDto wineDto = wineService.wineDtoById(container.getWine_id());
+            result.add(new ContainerViewDto(wineDto, container));
         }
 
         return result;

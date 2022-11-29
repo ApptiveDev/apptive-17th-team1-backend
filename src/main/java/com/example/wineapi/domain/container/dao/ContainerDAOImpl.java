@@ -1,7 +1,7 @@
 package com.example.wineapi.domain.container.dao;
 
-import com.example.wineapi.domain.container.repository.ContainerRepository;
 import com.example.wineapi.domain.container.entity.Container;
+import com.example.wineapi.domain.container.repository.ContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,17 +36,15 @@ public class ContainerDAOImpl implements ContainerDAO {
     }
 
     public List<Container> selectMyContainers(Long user_id) {
-        List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id")
+        List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id", Container.class)
                 .setParameter("user_id", user_id)
                 .getResultList();
-        if (li.size() == 0)
-            return null;
         return li;
     }
 
     @Override
     public void deleteContainer(Long user_id, Long wine_id) {
-        List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id and c.wine_id =: wine_id")
+        List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id and c.wine_id =: wine_id", Container.class)
                 .setParameter("user_id", user_id)
                 .setParameter("wine_id", wine_id)
                 .getResultList();
