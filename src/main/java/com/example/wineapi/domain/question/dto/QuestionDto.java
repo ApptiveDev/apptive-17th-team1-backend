@@ -3,7 +3,7 @@ package com.example.wineapi.domain.question.dto;
 import com.example.wineapi.domain.question.entity.Question;
 
 public class QuestionDto {
-    private Integer id;
+    private Long id;
     private Integer category; // 질문 대분류
     private Integer answerFormat;   // 질문 형식
     private String context;  // 질문 형태
@@ -15,11 +15,11 @@ public class QuestionDto {
         this.context = question.getContext();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

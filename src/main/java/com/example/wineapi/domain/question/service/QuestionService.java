@@ -1,8 +1,10 @@
 package com.example.wineapi.domain.question.service;
 
 import com.example.wineapi.domain.question.dto.AnswerDto;
+import com.example.wineapi.domain.question.dto.LikertQuestionDto;
 import com.example.wineapi.domain.question.dto.MultipleChoiceQuestionDto;
 import com.example.wineapi.domain.question.dto.QuestionDto;
+import com.example.wineapi.domain.question.entity.LikertScale;
 import com.example.wineapi.domain.question.entity.Question;
 import com.example.wineapi.domain.question.entity.QuestionOption;
 import com.example.wineapi.domain.question.repository.QuestionRepository;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @Transactional
 @Service
@@ -32,27 +36,31 @@ public class QuestionService {
 
     public ArrayList<QuestionDto> QuestionDtoByCategory(Integer category) {
         ArrayList<Question> questionArrayList = questionRepository.findQuestionByCategory(category);
-        ArrayList<QuestionDto> questionDtoArrayList = new ArrayList<>();
+        ArrayList<QuestionDto> QuestionDtoArrayList = new ArrayList<>();
         for (int i = 0; i < questionArrayList.size(); i++) {
             Question question = questionArrayList.get(i);
-            if (question.getAnswerFormat() == 1) {
-                QuestionDto questionDto = new QuestionDto(question);
-                questionDtoArrayList.add(questionDto);
-            } else {
-                MultipleChoiceQuestionDto questionDto = new MultipleChoiceQuestionDto(question);
-                List<QuestionOption> qoList = questionRepository.findByQuestionOption(questionDto.getId());
+            if (question.getAnswerFormat() == 1) {  // likert question
+                LikertQuestionDto likertQuestionDto = new LikertQuestionDto(question);
+                List<LikertScale> scaleList = questionRepository.findScale(likertQuestionDto.getId());
+                for (int j = 0; j < scaleList.size(); j++) {
+                    likertQuestionDto.getScaleList().add(scaleList.get(j).getScale());
+                }
+                QuestionDtoArrayList.add(likertQuestionDto);
+            } else if (question.getAnswerFormat() == 2) {   // multiple choice question
+                MultipleChoiceQuestionDto multipleChoiceQuestionDto = new MultipleChoiceQuestionDto(question);
+                List<QuestionOption> qoList = questionRepository.findByQuestionOption(multipleChoiceQuestionDto.getId());
                 ArrayList<QuestionOption> optionList = new ArrayList<>();
                 optionList.addAll(qoList);
                 System.out.println(optionList.size());
                 for (int j = 0; j < optionList.size(); j++) {
-                    questionDto.getQuestion_option().add(optionList.get(j).getChoice());
+                    multipleChoiceQuestionDto.addOption(optionList.get(j).getChoice());
                 }
 
-                questionDtoArrayList.add(questionDto);
+                QuestionDtoArrayList.add(multipleChoiceQuestionDto);
             }
         }
 
-        return questionDtoArrayList;
+        return QuestionDtoArrayList;
     }
 
     public WineDto findSimilarWineDto(AnswerDto answerDto) {

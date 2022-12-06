@@ -52,18 +52,22 @@ public class QuestionController {
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");
-        WineDto result = questionService.findSimilarWineDto(answerDto);
+        WineDto wineDto = questionService.findSimilarWineDto(answerDto);
 
-        /** 로그인한 상태에서 추천시 추천기록 저장 */
+        /* 로그인한 상태에서 추천시 추천기록 저장 */
         if (token != null) {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
-            ContainerDTO containerDTO = new ContainerDTO(userId, result.getId(), false);
-            containerService.deleteContainer(userId, result.getId());
-            containerService.saveContainer(userId ,containerDTO);
+            ContainerDTO containerDTO = new ContainerDTO(userId, wineDto.getId(), false);
+
+            /* 와인창고 존재여부 확인 */
+            ContainerDTO myContainerDTO = containerService.getContainer(userId, wineDto.getId());
+            if (myContainerDTO.getWine_id() == null) {  // 존재하지 않을때 추가
+                containerService.saveContainer(userId ,containerDTO);
+            }
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(wineDto, HttpStatus.OK);
     }
 
 }
