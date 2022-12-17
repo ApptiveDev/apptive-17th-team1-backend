@@ -20,13 +20,13 @@ public class Wine {
     private Integer variety;    // 품종
     private Integer country;    // 생산국
     private Integer type;   // 종류
-    private Double alcohol; // 알콜 도수
+    private Integer alcohol; // 알콜 도수
 
     public Wine() {
         this.id = Long.valueOf(0);
     }
 
-    public Wine(Long id, String name, Integer sugar, Integer tannin, Integer body, Integer carbonicAcid, Integer smell, Integer mood, Integer pairing, Integer variety, Integer country, Integer type, Double alcohol) {
+    public Wine(Long id, String name, Integer sugar, Integer tannin, Integer body, Integer carbonicAcid, Integer smell, Integer mood, Integer pairing, Integer variety, Integer country, Integer type, Integer alcohol) {
         this.id = id;
         this.name = name;
         this.sugar = sugar;
@@ -138,11 +138,11 @@ public class Wine {
         this.type = type;
     }
 
-    public Double getAlcohol() {
+    public Integer getAlcohol() {
         return alcohol;
     }
 
-    public void setAlcohol(Double alcohol) {
+    public void setAlcohol(Integer alcohol) {
         this.alcohol = alcohol;
     }
 }

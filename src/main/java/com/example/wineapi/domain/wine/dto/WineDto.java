@@ -15,7 +15,7 @@ public class WineDto {
     private Integer variety;    // 품종
     private Integer country;    // 생산국
     private Integer type;   // 종류
-    private Double alcohol; // 알콜 도수
+    private Integer alcohol; // 알콜 도수
 
     public WineDto(Wine wine) {
         this.id = wine.getId();
@@ -129,11 +129,11 @@ public class WineDto {
         this.type = type;
     }
 
-    public Double getAlcohol() {
+    public Integer getAlcohol() {
         return alcohol;
     }
 
-    public void setAlcohol(Double alcohol) {
+    public void setAlcohol(Integer alcohol) {
         this.alcohol = alcohol;
     }
 }

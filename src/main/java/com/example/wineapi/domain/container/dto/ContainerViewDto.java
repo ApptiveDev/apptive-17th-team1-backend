@@ -1,7 +1,7 @@
 package com.example.wineapi.domain.container.dto;
 
-import com.example.wineapi.domain.wine.dto.WineDto;
 import com.example.wineapi.domain.container.entity.Container;
+import com.example.wineapi.domain.wine.dto.WineDto;
 
 public class ContainerViewDto {
     private boolean is_like;
@@ -17,7 +17,7 @@ public class ContainerViewDto {
     private Integer variety;    // 품종
     private Integer country;    // 생산국
     private Integer type;   // 종류
-    private Double alcohol; // 알콜 도수
+    private Integer alcohol; // 알콜 도수
 
     public ContainerViewDto(WineDto wine, Container container) {
         this.id = wine.getId();
@@ -140,11 +140,11 @@ public class ContainerViewDto {
         this.type = type;
     }
 
-    public Double getAlcohol() {
+    public Integer getAlcohol() {
         return alcohol;
     }
 
-    public void setAlcohol(Double alcohol) {
+    public void setAlcohol(Integer alcohol) {
         this.alcohol = alcohol;
     }
 }
