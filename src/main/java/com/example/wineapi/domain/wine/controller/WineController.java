@@ -1,6 +1,7 @@
 package com.example.wineapi.domain.wine.controller;
 
 import com.example.wineapi.domain.wine.dto.WineDto;
+import com.example.wineapi.domain.wine.dto.WineInfoDto;
 import com.example.wineapi.domain.wine.service.WineService;
 import com.example.wineapi.global.error.ErrorCode;
 import com.example.wineapi.global.error.exception.CustomException;
@@ -38,6 +39,16 @@ public class WineController {
         return new ResponseEntity<>(wineDto, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/id/v2/{id}", method = RequestMethod.GET)
+    public ResponseEntity<WineInfoDto> wineInfoById(@PathVariable Long id) {
+        WineInfoDto wineInfoDto = wineService.wineInfoDtoById(id);
+        if (wineInfoDto.getId() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(wineInfoDto, HttpStatus.OK);
+    }
+    
     /** 와인 id 기반 와인이미지 조회 */
     @RequestMapping(value = "/image/id/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImageByWineId(@PathVariable Long id) throws IOException {

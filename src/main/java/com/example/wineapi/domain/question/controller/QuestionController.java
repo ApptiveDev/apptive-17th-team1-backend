@@ -7,6 +7,7 @@ import com.example.wineapi.domain.question.dto.AnswerDto;
 import com.example.wineapi.domain.question.dto.QuestionDto;
 import com.example.wineapi.domain.question.service.QuestionService;
 import com.example.wineapi.domain.wine.dto.WineDto;
+import com.example.wineapi.domain.wine.dto.WineInfoDto;
 import com.example.wineapi.global.error.ErrorCode;
 import com.example.wineapi.global.error.exception.CustomException;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
@@ -68,6 +69,27 @@ public class QuestionController {
         }
 
         return new ResponseEntity<>(wineDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/answer/v2")
+    public ResponseEntity<WineInfoDto> recommendWineInfo(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
+        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        String token = request.getHeader("X-AUTH-TOKEN");
+        WineInfoDto result = questionService.findSimilarWineInfoDto(answerDto);
+
+        /** 로그인한 상태에서 추천시 추천기록 저장 */
+        if (token != null) {
+            String userEmail = jwtAuthenticationProvider.getUserPk(token);
+            Long userId = memberService.getId(userEmail);
+            ContainerDTO containerDTO = new ContainerDTO(userId, result.getId(), false);
+            containerService.deleteContainer(userId, result.getId());
+            containerService.saveContainer(userId ,containerDTO);
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }

@@ -1,23 +1,25 @@
 package com.example.wineapi.domain.container.dto;
 
-import com.example.wineapi.domain.wine.dto.WineDto;
 import com.example.wineapi.domain.container.entity.Container;
+import com.example.wineapi.domain.wine.dto.WineDto;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class ContainerViewDto {
-    private boolean is_like;
     private Long id;
     private String name;
     private Integer sugar;  // 당도
     private Integer tannin; // 타닌
     private Integer body;   // 바디감
-    private Integer carbonicAcid;   // 탄산
-    private Integer smell;  // 향
-    private Integer mood;   // 분위기
-    private Integer pairing;    // 페어링
+    private Integer acidity;   // 탄산
+    private Integer flavor;  // 향
+    private Integer food;   // 어울리는 음식
     private Integer variety;    // 품종
     private Integer country;    // 생산국
     private Integer type;   // 종류
-    private Double alcohol; // 알콜 도수
+    private Integer alcohol; // 알콜 도수
+    private boolean is_like;    // 좋아요 여부
 
     public ContainerViewDto(WineDto wine, Container container) {
         this.id = wine.getId();
@@ -25,126 +27,13 @@ public class ContainerViewDto {
         this.sugar = wine.getSugar();
         this.tannin = wine.getTannin();
         this.body = wine.getBody();
-        this.carbonicAcid = wine.getCarbonicAcid();
-        this.smell = wine.getSmell();
-        this.mood = wine.getMood();
-        this.pairing = wine.getPairing();
+        this.acidity = wine.getAcidity();
+        this.flavor = wine.getFlavor();
+        this.food = wine.getFood();
         this.variety = wine.getVariety();
         this.country = wine.getCountry();
         this.type = wine.getType();
         this.alcohol = wine.getAlcohol();
         this.is_like = container.getIs_like();
-    }
-
-    public boolean isIs_like() {
-        return is_like;
-    }
-
-    public void setIs_like(boolean is_like) {
-        this.is_like = is_like;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getSugar() {
-        return sugar;
-    }
-
-    public void setSugar(Integer sugar) {
-        this.sugar = sugar;
-    }
-
-    public Integer getTannin() {
-        return tannin;
-    }
-
-    public void setTannin(Integer tannin) {
-        this.tannin = tannin;
-    }
-
-    public Integer getBody() {
-        return body;
-    }
-
-    public void setBody(Integer body) {
-        this.body = body;
-    }
-
-    public Integer getCarbonicAcid() {
-        return carbonicAcid;
-    }
-
-    public void setCarbonicAcid(Integer carbonicAcid) {
-        this.carbonicAcid = carbonicAcid;
-    }
-
-    public Integer getSmell() {
-        return smell;
-    }
-
-    public void setSmell(Integer smell) {
-        this.smell = smell;
-    }
-
-    public Integer getMood() {
-        return mood;
-    }
-
-    public void setMood(Integer mood) {
-        this.mood = mood;
-    }
-
-    public Integer getPairing() {
-        return pairing;
-    }
-
-    public void setPairing(Integer pairing) {
-        this.pairing = pairing;
-    }
-
-    public Integer getVariety() {
-        return variety;
-    }
-
-    public void setVariety(Integer variety) {
-        this.variety = variety;
-    }
-
-    public Integer getCountry() {
-        return country;
-    }
-
-    public void setCountry(Integer country) {
-        this.country = country;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Double getAlcohol() {
-        return alcohol;
-    }
-
-    public void setAlcohol(Double alcohol) {
-        this.alcohol = alcohol;
     }
 }
