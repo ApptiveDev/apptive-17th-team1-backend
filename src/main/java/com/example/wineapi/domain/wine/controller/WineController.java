@@ -1,6 +1,7 @@
 package com.example.wineapi.domain.wine.controller;
 
 import com.example.wineapi.domain.wine.dto.WineDto;
+import com.example.wineapi.domain.wine.dto.WineInfoDto;
 import com.example.wineapi.domain.wine.service.WineService;
 import com.example.wineapi.global.error.exception.NotFoundImageException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,16 @@ public class WineController {
         }
 
         return new ResponseEntity<>(wineDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/id/v2/{id}", method = RequestMethod.GET)
+    public ResponseEntity<WineInfoDto> wineInfoById(@PathVariable Long id) {
+        WineInfoDto wineInfoDto = wineService.wineInfoDtoById(id);
+        if (wineInfoDto.getId() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(wineInfoDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/image/{wineImageFileOriginName}")
