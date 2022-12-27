@@ -9,7 +9,7 @@ public class QuestionOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer questionId;
+    private Long questionId;
     private String choice;
 
     public Integer getId() {
@@ -20,11 +20,11 @@ public class QuestionOption {
         this.id = id;
     }
 
-    public Integer getQuestionId() {
+    public Long getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(Integer questionId) {
+    public void setQuestionId(Long questionId) {
         this.questionId = questionId;
     }
 

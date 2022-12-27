@@ -47,6 +47,14 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
+    public ContainerDTO getContainer(Long userId, Long wineId) {
+        Container container = containerDAO.selectContainer(userId, wineId).orElse(new Container());
+        ContainerDTO containerDTO = new ContainerDTO(container);
+
+        return containerDTO;
+    }
+
+    @Override
     public List<ContainerViewDto> getMyContainers(Long user_id) {
         List<Container> li = containerDAO.selectMyContainers(user_id);
         List<ContainerViewDto> result = new ArrayList<>();

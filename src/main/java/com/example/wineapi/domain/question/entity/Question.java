@@ -7,16 +7,16 @@ import javax.persistence.*;
 public class Question {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private Integer category; // 질문 대분류
     private Integer answerFormat;   // 질문 형식
     private String context;  // 질문 형태
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

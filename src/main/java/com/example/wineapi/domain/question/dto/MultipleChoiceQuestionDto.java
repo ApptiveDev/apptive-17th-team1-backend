@@ -19,4 +19,8 @@ public class MultipleChoiceQuestionDto extends QuestionDto {
     public void setQuestion_option(ArrayList<String> question_option) {
         this.question_option = question_option;
     }
+
+    public void addOption(String option) {
+        this.question_option.add(option);
+    }
 }

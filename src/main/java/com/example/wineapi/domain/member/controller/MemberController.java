@@ -1,19 +1,19 @@
 package com.example.wineapi.domain.member.controller;
 
-import com.example.wineapi.jwt.JwtAuthenticationProvider;
-
+import com.example.wineapi.domain.container.service.ContainerService;
 import com.example.wineapi.domain.member.dto.LoginDTO;
 import com.example.wineapi.domain.member.dto.MemberDTO;
 import com.example.wineapi.domain.member.dto.TokenDTO;
 import com.example.wineapi.domain.member.entity.Member;
 import com.example.wineapi.domain.member.repository.UserRepository;
 import com.example.wineapi.domain.member.service.MemberService;
-import com.example.wineapi.domain.container.service.ContainerService;
+import com.example.wineapi.global.error.ErrorCode;
+import com.example.wineapi.global.error.exception.CustomException;
+import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,8 +54,8 @@ public class MemberController {
     /** 회원가입 */
     @PostMapping("/join/v1")
     public ResponseEntity<MemberDTO> join(@RequestBody MemberDTO memberDTO){
-        if(memberService.isDuplicated(memberDTO.getEmail())) { // 이메일 중복시
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        if (memberService.isDuplicated(memberDTO.getEmail())) { // 이메일 중복시
+            throw new CustomException(ErrorCode.DUPLICATE_MEMBER_NAME);
         }
         userRepository.save(Member.builder()
                 .email(memberDTO.getEmail())
@@ -76,7 +76,7 @@ public class MemberController {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }
         String token = jwtAuthenticationProvider.createToken(member.getUsername(), member.getRoles()); //토큰 생성 -> 입력을 회원 ID로 바꿔야 수월
         response.setHeader("X-AUTH-TOKEN", token);
@@ -92,11 +92,10 @@ public class MemberController {
     }
 
     /** 회원 삭제 */
-    // TODO 회원삭제시 창고 삭제
     @DeleteMapping("/deleteMember/v1")
     public ResponseEntity<String> deleteMember(HttpServletRequest request) throws Exception {
         if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid token");
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
         String token = request.getHeader("X-AUTH-TOKEN");
 
@@ -106,7 +105,7 @@ public class MemberController {
             memberService.deleteMember(userId);
             containerService.deleteContainers(userId);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot find member");
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("delete success");

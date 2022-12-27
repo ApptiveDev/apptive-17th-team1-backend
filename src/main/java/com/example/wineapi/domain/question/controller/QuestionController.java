@@ -8,6 +8,8 @@ import com.example.wineapi.domain.question.dto.QuestionDto;
 import com.example.wineapi.domain.question.service.QuestionService;
 import com.example.wineapi.domain.wine.dto.WineDto;
 import com.example.wineapi.domain.wine.dto.WineInfoDto;
+import com.example.wineapi.global.error.ErrorCode;
+import com.example.wineapi.global.error.exception.CustomException;
 import com.example.wineapi.jwt.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +40,7 @@ public class QuestionController {
     @RequestMapping(value = "/category/v1/{category}", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<QuestionDto>> QuestionByCategory(@PathVariable("category") Integer category) {
 
-        if (category > 3) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (category > 3) throw new CustomException(ErrorCode.QUESTION_NOT_FOUND);
         
         ArrayList<QuestionDto> result = questionService.QuestionDtoByCategory(category);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -46,23 +48,27 @@ public class QuestionController {
 
     @RequestMapping(value = "/answer/v1")
     public ResponseEntity<WineDto> recommendWine(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
-        if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");
-        WineDto result = questionService.findSimilarWineDto(answerDto);
+        WineDto wineDto = questionService.findSimilarWineDto(answerDto);
 
-        /** 로그인한 상태에서 추천시 추천기록 저장 */
+        /* 로그인한 상태에서 추천시 추천기록 저장 */
         if (token != null) {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
-            ContainerDTO containerDTO = new ContainerDTO(userId, result.getId(), false);
-            containerService.deleteContainer(userId, result.getId());
-            containerService.saveContainer(userId ,containerDTO);
+            ContainerDTO containerDTO = new ContainerDTO(userId, wineDto.getId(), false);
+
+            /* 와인창고 존재여부 확인 */
+            ContainerDTO myContainerDTO = containerService.getContainer(userId, wineDto.getId());
+            if (myContainerDTO.getWine_id() == null) {  // 존재하지 않을때 추가
+                containerService.saveContainer(userId ,containerDTO);
+            }
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(wineDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/answer/v2")

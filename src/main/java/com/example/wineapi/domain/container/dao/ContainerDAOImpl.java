@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
-@Component  // 응아니야
+@Component
 public class ContainerDAOImpl implements ContainerDAO {
     private final ContainerRepository containerRepository;
 
@@ -33,6 +34,14 @@ public class ContainerDAOImpl implements ContainerDAO {
         Container selectContainer = containerRepository.getById(id);
 
         return selectContainer;
+    }
+
+    @Override
+    public Optional<Container> selectContainer(Long user_id, Long wine_id) {
+        return em.createQuery("select c from Container c where c.user_id = :user_id and c.wine_id = :wine_id", Container.class)
+                .setParameter("user_id", user_id)
+                .setParameter("wine_id", wine_id)
+                .getResultList().stream().findAny();
     }
 
     @Override

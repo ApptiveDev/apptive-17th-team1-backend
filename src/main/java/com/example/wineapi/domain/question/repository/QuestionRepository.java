@@ -1,5 +1,6 @@
 package com.example.wineapi.domain.question.repository;
 
+import com.example.wineapi.domain.question.entity.LikertScale;
 import com.example.wineapi.domain.question.entity.Question;
 import com.example.wineapi.domain.question.entity.QuestionOption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,14 @@ public class QuestionRepository {
                 .getResultList());
         return result;
     }
-    public List<QuestionOption> findByQuestionOption(Integer questionId) {
+    public List<QuestionOption> findByQuestionOption(Long questionId) {
         return em.createQuery("select m from QuestionOption m where m.questionId = :questionId", QuestionOption.class)
+                .setParameter("questionId", questionId)
+                .getResultList();
+    }
+
+    public List<LikertScale> findScale(Long questionId) {
+        return em.createQuery("select m from LikertScale m where m.questionId = :questionId", LikertScale.class)
                 .setParameter("questionId", questionId)
                 .getResultList();
     }
