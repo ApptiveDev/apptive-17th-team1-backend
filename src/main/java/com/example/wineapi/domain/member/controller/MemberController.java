@@ -74,7 +74,7 @@ public class MemberController {
     @PostMapping("/login/v1") //로그인 시 이메일, 비번만 JSON으로 줘도됨 -> 로그인 필요 x
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Member member = userRepository.findByEmail(loginDTO.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED_MEMBER));
         if (!passwordEncoder.matches(loginDTO.getPass(), member.getPassword())) {
             throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }

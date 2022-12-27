@@ -5,6 +5,8 @@ import com.example.wineapi.domain.container.dto.ContainerDTO;
 import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.entity.Container;
 import com.example.wineapi.domain.wine.dto.WineDto;
+import com.example.wineapi.domain.wine.entity.wineProperty.*;
+import com.example.wineapi.domain.wine.repository.WineRepository;
 import com.example.wineapi.domain.wine.service.WineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,13 @@ import java.util.List;
 public class ContainerServiceImpl implements ContainerService {
     private final ContainerDAO containerDAO;
     private final WineService wineService;
+    private final WineRepository wineRepository;
 
     @Autowired
-    public ContainerServiceImpl(ContainerDAO containerDAO, WineService wineService) {
+    public ContainerServiceImpl(ContainerDAO containerDAO, WineService wineService, WineRepository wineRepository) {
         this.containerDAO = containerDAO;
         this.wineService = wineService;
+        this.wineRepository = wineRepository;
     }
 
     @Override
@@ -61,7 +65,14 @@ public class ContainerServiceImpl implements ContainerService {
         for (int i = 0; i < li.size(); i++) {
             Container container = li.get(i);
             WineDto wineDto = wineService.wineDtoById(container.getWine_id());
-            result.add(new ContainerViewDto(wineDto, container));
+            ContainerViewDto containerViewDto = new ContainerViewDto(wineDto, container);
+            containerViewDto.setFlavor(wineRepository.selectFlavor(wineDto.getFlavor()).orElse(new Flavor()).getContent());
+            containerViewDto.setFood(wineRepository.selectFood(wineDto.getFood()).orElse(new Food()).getContent());
+            containerViewDto.setVariety(wineRepository.selectVariety(wineDto.getVariety()).orElse(new Variety()).getContent());
+            containerViewDto.setCountry(wineRepository.selectCountry(wineDto.getCountry()).orElse(new Country()).getContent());
+            containerViewDto.setType(wineRepository.selectType(wineDto.getType()).orElse(new Type()).getContent());
+            containerViewDto.setAlcohol(wineRepository.selectAlcohol(wineDto.getAlcohol()).orElse(new Alcohol()).getContent());
+            result.add(containerViewDto);
         }
 
         return result;
