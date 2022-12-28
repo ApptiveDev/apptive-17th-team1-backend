@@ -26,6 +26,24 @@ public class ContainerViewDto {
     private LocalTime localTime;
     private boolean is_like;    // 좋아요 여부
 
+    public ContainerViewDto(WineDto wine) {
+        this.id = wine.getId();
+        this.name = wine.getName();
+        this.sugar = wine.getSugar();
+        this.tannin = wine.getTannin();
+        this.body = wine.getBody();
+        this.acidity = wine.getAcidity();
+        this.flavor = new String();
+        this.food = new String();
+        this.variety = new String();
+        this.country = new String();
+        this.type = new String();
+        this.alcohol = new String();
+        this.is_like = false;
+        this.localDate = null;
+        this.localTime = null;
+    }
+
     public ContainerViewDto(WineDto wine, Container container) {
         this.id = wine.getId();
         this.name = wine.getName();

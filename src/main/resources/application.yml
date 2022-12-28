@@ -25,7 +25,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://wine-db.cu9bcv3q3oz3.us-east-1.rds.amazonaws.com:3306/mydb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
-    password: # password 비공개
+    password: wine1234 # password 비공개
 
 
 ---

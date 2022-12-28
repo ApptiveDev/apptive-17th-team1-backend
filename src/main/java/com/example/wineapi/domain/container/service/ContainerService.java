@@ -10,6 +10,9 @@ public interface ContainerService {
     ContainerDTO getContainer(Long id);
 
     ContainerDTO getContainer(Long userId, Long wineId);
+
+    ContainerViewDto getContainerView(Long wineId);
+    ContainerViewDto getContainerView(Long userId, Long wineId);
     void deleteContainer(Long user_id, Long wine_id);
 
     ContainerDTO updateContainer(Long userId, Long wineId, boolean isLike);
