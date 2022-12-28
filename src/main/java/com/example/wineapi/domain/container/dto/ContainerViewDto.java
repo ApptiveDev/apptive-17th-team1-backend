@@ -5,6 +5,9 @@ import com.example.wineapi.domain.wine.dto.WineDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Getter @Setter
 public class ContainerViewDto {
     private Long id;
@@ -19,6 +22,8 @@ public class ContainerViewDto {
     private String country;    // 생산국
     private String type;   // 종류
     private String alcohol; // 알콜 도수
+    private LocalDate localDate;
+    private LocalTime localTime;
     private boolean is_like;    // 좋아요 여부
 
     public ContainerViewDto(WineDto wine, Container container) {
@@ -35,5 +40,7 @@ public class ContainerViewDto {
         this.type = new String();
         this.alcohol = new String();
         this.is_like = container.getIs_like();
+        this.localDate = container.getLocalDate();
+        this.localTime = container.getLocalTime();
     }
 }

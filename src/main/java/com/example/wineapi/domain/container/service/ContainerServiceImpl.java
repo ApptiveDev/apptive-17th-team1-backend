@@ -29,7 +29,7 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public ContainerDTO saveContainer(Long userId, ContainerDTO containerDTO) {
-        Container container = new Container(userId, containerDTO.getWine_id(), containerDTO.getIs_like());
+        Container container = new Container(userId, containerDTO.getWine_id(), containerDTO.getLocalDate(), containerDTO.getLocalTime(), containerDTO.getIs_like());
 
         Container savedContainer = containerDAO.insertContainer(container);
 
@@ -74,7 +74,25 @@ public class ContainerServiceImpl implements ContainerService {
             containerViewDto.setAlcohol(wineRepository.selectAlcohol(wineDto.getAlcohol()).orElse(new Alcohol()).getContent());
             result.add(containerViewDto);
         }
+        return result;
+    }
 
+    @Override
+    public List<ContainerViewDto> getMyLikedContainers(Long user_id) {
+        List<Container> li = containerDAO.selectMyLikedContainers(user_id);
+        List<ContainerViewDto> result = new ArrayList<>();
+        for (int i = 0; i < li.size(); i++) {
+            Container container = li.get(i);
+            WineDto wineDto = wineService.wineDtoById(container.getWine_id());
+            ContainerViewDto containerViewDto = new ContainerViewDto(wineDto, container);
+            containerViewDto.setFlavor(wineRepository.selectFlavor(wineDto.getFlavor()).orElse(new Flavor()).getContent());
+            containerViewDto.setFood(wineRepository.selectFood(wineDto.getFood()).orElse(new Food()).getContent());
+            containerViewDto.setVariety(wineRepository.selectVariety(wineDto.getVariety()).orElse(new Variety()).getContent());
+            containerViewDto.setCountry(wineRepository.selectCountry(wineDto.getCountry()).orElse(new Country()).getContent());
+            containerViewDto.setType(wineRepository.selectType(wineDto.getType()).orElse(new Type()).getContent());
+            containerViewDto.setAlcohol(wineRepository.selectAlcohol(wineDto.getAlcohol()).orElse(new Alcohol()).getContent());
+            result.add(containerViewDto);
+        }
         return result;
     }
 
@@ -86,5 +104,13 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public void deleteContainers(Long user_id) {
         containerDAO.deleteContainers(user_id);
+    }
+
+    @Override
+    public ContainerDTO updateContainer(Long userId, Long wineId, boolean isLike) {
+        ContainerDTO containerDTO = this.getContainer(userId, wineId);
+        containerDTO.set_like(isLike);
+        containerDAO.deleteContainer(userId, wineId);
+        return this.saveContainer(userId, containerDTO);
     }
 }

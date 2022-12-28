@@ -12,7 +12,11 @@ public interface ContainerService {
     ContainerDTO getContainer(Long userId, Long wineId);
     void deleteContainer(Long user_id, Long wine_id);
 
+    ContainerDTO updateContainer(Long userId, Long wineId, boolean isLike);
+
     void deleteContainers(Long user_id);
 
     List<ContainerViewDto> getMyContainers(Long user_id);
+
+    List<ContainerViewDto> getMyLikedContainers(Long user_id);
 }
