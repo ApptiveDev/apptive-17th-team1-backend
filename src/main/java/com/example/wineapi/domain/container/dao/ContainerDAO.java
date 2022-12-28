@@ -15,4 +15,6 @@ public interface ContainerDAO {
 
     void deleteContainers(Long user_id);
     List<Container> selectMyContainers(Long user_id);
+
+    List<Container> selectMyLikedContainers(Long user_id);
 }

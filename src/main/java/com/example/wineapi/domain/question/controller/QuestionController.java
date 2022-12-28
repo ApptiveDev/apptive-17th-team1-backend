@@ -74,7 +74,7 @@ public class QuestionController {
     @RequestMapping(value = "/answer/v2")
     public ResponseEntity<WineInfoDto> recommendWineInfo(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
         if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");
@@ -85,8 +85,12 @@ public class QuestionController {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
             ContainerDTO containerDTO = new ContainerDTO(userId, result.getId(), false);
-            containerService.deleteContainer(userId, result.getId());
-            containerService.saveContainer(userId ,containerDTO);
+
+            /* 와인창고 존재여부 확인 */
+            ContainerDTO myContainerDTO = containerService.getContainer(userId, result.getId());
+            if (myContainerDTO.getWine_id() == null) {  // 존재하지 않을때 추가
+                containerService.saveContainer(userId ,containerDTO);
+            }
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);

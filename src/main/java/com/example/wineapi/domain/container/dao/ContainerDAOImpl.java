@@ -53,6 +53,14 @@ public class ContainerDAOImpl implements ContainerDAO {
     }
 
     @Override
+    public List<Container> selectMyLikedContainers(Long user_id) {
+        List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id and c.is_like = 1", Container.class)
+                .setParameter("user_id", user_id)
+                .getResultList();
+        return li;
+    }
+
+    @Override
     public void deleteContainer(Long user_id, Long wine_id) {
         List<Container> li = em.createQuery("select c from Container c where c.user_id =: user_id and c.wine_id =: wine_id", Container.class)
                 .setParameter("user_id", user_id)

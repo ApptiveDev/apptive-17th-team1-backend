@@ -1,8 +1,14 @@
 package com.example.wineapi.domain.container.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
+@Getter @Setter
 @Table(name = "Container")
 public class Container {
     @Id
@@ -15,6 +21,9 @@ public class Container {
     @Column(nullable = false)
     private Long wine_id;
 
+    private LocalDate localDate;
+    private LocalTime localTime;
+
     private boolean is_like;
 
     public Container() {
@@ -23,42 +32,23 @@ public class Container {
         this.is_like = false;
     }
 
+    public Container(Long user_id, Long wine_id, LocalDate localDate, LocalTime localTime, boolean is_like) {
+        this.id = id;
+        this.user_id = user_id;
+        this.wine_id = wine_id;
+        this.localDate = localDate;
+        this.localTime = localTime;
+        this.is_like = is_like;
+    }
+
     public Container(Long user_id, Long wine_id, boolean is_like) {
         this.user_id = user_id;
         this.wine_id = wine_id;
         this.is_like = is_like;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
-
-    public Long getWine_id() {
-        return wine_id;
-    }
-
-    public void setWine_id(Long wine_id) {
-        this.wine_id = wine_id;
-    }
-
     public boolean getIs_like() {
-        return is_like;
-    }
-
-    public void setIs_like(boolean is_like) {
-        this.is_like = is_like;
+        return this.is_like;
     }
 
     @Override

@@ -69,8 +69,7 @@ public class ContainerController {
         if (token != null) {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
-            containerService.deleteContainer(userId, containerDTO.getWine_id());
-            ContainerDTO result = containerService.saveContainer(userId, containerDTO);
+            ContainerDTO result = containerService.updateContainer(userId, containerDTO.getWine_id(), containerDTO.getIs_like());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
             throw new CustomException(ErrorCode.TOKEN_MISS);
@@ -93,5 +92,22 @@ public class ContainerController {
         } else {
             throw new CustomException(ErrorCode.TOKEN_MISS);
         }
+    }
+
+    @GetMapping("/getLikedContainers/v1")
+    public ResponseEntity<List<ContainerViewDto>> getLikedContainers(HttpServletRequest request) {
+        if (request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
+        }
+        String token = request.getHeader("X-AUTH-TOKEN");
+        if (token == null) {
+            throw new CustomException(ErrorCode.TOKEN_MISS);
+        }
+
+        String email = jwtAuthenticationProvider.getUserPk(token);
+        Long user_id = memberService.getId(email);
+        List<ContainerViewDto> result = containerService.getMyLikedContainers(user_id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
