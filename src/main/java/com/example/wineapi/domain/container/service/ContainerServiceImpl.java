@@ -59,6 +59,35 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
+    public ContainerViewDto getContainerView(Long wineId) {
+        WineDto wineDto = wineService.wineDtoById(wineId);
+        ContainerViewDto containerViewDto = new ContainerViewDto(wineDto);
+        containerViewDto.setFlavor(wineRepository.selectFlavor(wineDto.getFlavor()).orElse(new Flavor()).getContent());
+        containerViewDto.setFood(wineRepository.selectFood(wineDto.getFood()).orElse(new Food()).getContent());
+        containerViewDto.setVariety(wineRepository.selectVariety(wineDto.getVariety()).orElse(new Variety()).getContent());
+        containerViewDto.setCountry(wineRepository.selectCountry(wineDto.getCountry()).orElse(new Country()).getContent());
+        containerViewDto.setType(wineRepository.selectType(wineDto.getType()).orElse(new Type()).getContent());
+        containerViewDto.setAlcohol(wineRepository.selectAlcohol(wineDto.getAlcohol()).orElse(new Alcohol()).getContent());
+
+        return containerViewDto;
+    }
+
+    @Override
+    public ContainerViewDto getContainerView(Long userId, Long wineId) {
+        Container container = containerDAO.selectContainer(userId, wineId).orElse(new Container());
+        WineDto wineDto = wineService.wineDtoById(container.getWine_id());
+        ContainerViewDto containerViewDto = new ContainerViewDto(wineDto, container);
+        containerViewDto.setFlavor(wineRepository.selectFlavor(wineDto.getFlavor()).orElse(new Flavor()).getContent());
+        containerViewDto.setFood(wineRepository.selectFood(wineDto.getFood()).orElse(new Food()).getContent());
+        containerViewDto.setVariety(wineRepository.selectVariety(wineDto.getVariety()).orElse(new Variety()).getContent());
+        containerViewDto.setCountry(wineRepository.selectCountry(wineDto.getCountry()).orElse(new Country()).getContent());
+        containerViewDto.setType(wineRepository.selectType(wineDto.getType()).orElse(new Type()).getContent());
+        containerViewDto.setAlcohol(wineRepository.selectAlcohol(wineDto.getAlcohol()).orElse(new Alcohol()).getContent());
+
+        return containerViewDto;
+    }
+
+    @Override
     public List<ContainerViewDto> getMyContainers(Long user_id) {
         List<Container> li = containerDAO.selectMyContainers(user_id);
         List<ContainerViewDto> result = new ArrayList<>();

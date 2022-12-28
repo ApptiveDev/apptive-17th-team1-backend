@@ -1,6 +1,7 @@
 package com.example.wineapi.domain.question.controller;
 
 import com.example.wineapi.domain.container.dto.ContainerDTO;
+import com.example.wineapi.domain.container.dto.ContainerViewDto;
 import com.example.wineapi.domain.container.service.ContainerServiceImpl;
 import com.example.wineapi.domain.member.service.MemberServiceImpl;
 import com.example.wineapi.domain.question.dto.AnswerDto;
@@ -72,28 +73,30 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/answer/v2")
-    public ResponseEntity<WineInfoDto> recommendWineInfo(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
+    public ResponseEntity<ContainerViewDto> recommendWineInfo(@RequestBody AnswerDto answerDto, HttpServletRequest request) {
         if(request.getAttribute("exception") == HttpStatus.BAD_REQUEST) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
         }
 
         String token = request.getHeader("X-AUTH-TOKEN");
-        WineInfoDto result = questionService.findSimilarWineInfoDto(answerDto);
-
+        WineInfoDto wineInfoDto = questionService.findSimilarWineInfoDto(answerDto);
+        ContainerViewDto containerViewDto = containerService.getContainerView(wineInfoDto.getId());
         /** 로그인한 상태에서 추천시 추천기록 저장 */
         if (token != null) {
             String userEmail = jwtAuthenticationProvider.getUserPk(token);
             Long userId = memberService.getId(userEmail);
-            ContainerDTO containerDTO = new ContainerDTO(userId, result.getId(), false);
+            ContainerDTO containerDTO = new ContainerDTO(userId, wineInfoDto.getId(), false);
 
             /* 와인창고 존재여부 확인 */
-            ContainerDTO myContainerDTO = containerService.getContainer(userId, result.getId());
+            ContainerDTO myContainerDTO = containerService.getContainer(userId, wineInfoDto.getId());
             if (myContainerDTO.getWine_id() == null) {  // 존재하지 않을때 추가
-                containerService.saveContainer(userId ,containerDTO);
+                containerService.saveContainer(userId, containerDTO);
             }
+            containerViewDto = containerService.getContainerView(userId, wineInfoDto.getId());
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(containerViewDto, HttpStatus.OK);
+
     }
 
 }
