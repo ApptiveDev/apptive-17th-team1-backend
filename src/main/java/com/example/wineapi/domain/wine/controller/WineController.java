@@ -52,7 +52,7 @@ public class WineController {
     /** 와인 id 기반 와인이미지 조회 */
     @RequestMapping(value = "/image/id/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImageByWineId(@PathVariable Long id) throws IOException {
-        InputStream in = getClass().getResourceAsStream("/img/wine/wine" + Long.valueOf(id) + ".jpg");  // 경로 찾기
+        InputStream in = getClass().getResourceAsStream("/img/wine/" + Long.valueOf(id) + ".jpg");  // 경로 찾기
         if (in == null) throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
         return new ResponseEntity<>(IOUtils.toByteArray(in), HttpStatus.OK);
     }

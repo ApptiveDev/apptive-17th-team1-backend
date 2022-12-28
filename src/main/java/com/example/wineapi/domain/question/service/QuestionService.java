@@ -101,7 +101,7 @@ public class QuestionService {
 
     public WineInfoDto findSimilarWineInfoDto(AnswerDto answerDto) {
         // answerDto parameters
-        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("type", "sugar", "food", "smell",
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("type", "sugar", "food", "flavor",
                                                                     "tannin", "body", "acidity", "alcohol",
                                                                     "variety", "country"));
         // answerDto parameter values
