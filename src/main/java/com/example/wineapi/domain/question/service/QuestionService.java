@@ -69,14 +69,14 @@ public class QuestionService {
 
     public WineDto findSimilarWineDto(AnswerDto answerDto) {
         // answerDto parameters
-        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("sugar", "tannin", "body", "acidity",
-                                                                    "smell", "mood", "variety", "country",
-                                                                    "type", "alcohol"));
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("type", "sugar", "food", "smell",
+                                                                    "tannin", "body", "acidity", "alcohol",
+                                                                    "variety", "country"));
         // answerDto parameter values
-        ArrayList<Integer> parameter_values = new ArrayList<>(Arrays.asList(answerDto.getSugar(),
-                answerDto.getTannin(), answerDto.getBody(), answerDto.getAcidity(), answerDto.getSmell(),
-                answerDto.getFood(), answerDto.getVariety(), answerDto.getCountry(),
-                answerDto.getType(), answerDto.getAlcohol()));
+        ArrayList<Integer> parameter_values = new ArrayList<>(Arrays.asList(answerDto.getType(),
+                answerDto.getSugar(), answerDto.getFood(), answerDto.getSmell(), answerDto.getTannin(),
+                answerDto.getBody(), answerDto.getAcidity(), answerDto.getAlcohol(),
+                answerDto.getVariety(), answerDto.getCountry()));
 
         // make query string
         StringBuffer stringBuffer = new StringBuffer();
@@ -101,14 +101,14 @@ public class QuestionService {
 
     public WineInfoDto findSimilarWineInfoDto(AnswerDto answerDto) {
         // answerDto parameters
-        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("sugar", "tannin", "body", "acidity",
-                                                                    "smell", "food", "variety", "country",
-                                                                    "type", "alcohol"));
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("type", "sugar", "food", "smell",
+                                                                    "tannin", "body", "acidity", "alcohol",
+                                                                    "variety", "country"));
         // answerDto parameter values
-        ArrayList<Integer> parameter_values = new ArrayList<>(Arrays.asList(answerDto.getSugar(),
-                answerDto.getTannin(), answerDto.getBody(), answerDto.getAcidity(), answerDto.getSmell(),
-                answerDto.getFood(), answerDto.getVariety(), answerDto.getCountry(),
-                answerDto.getType(), answerDto.getAlcohol()));
+        ArrayList<Integer> parameter_values = new ArrayList<>(Arrays.asList(answerDto.getType(),
+                answerDto.getSugar(), answerDto.getFood(), answerDto.getSmell(), answerDto.getTannin(),
+                answerDto.getBody(), answerDto.getAcidity(), answerDto.getAlcohol(),
+                answerDto.getVariety(), answerDto.getCountry()));
 
         // make query string
         StringBuffer stringBuffer = new StringBuffer();
