@@ -12,6 +12,8 @@
     <td align="center"><a href="https://github.com/mong3125"><p><b>김대길</b></p></a><small>💻 Back-End Developer</small></td>
     <td align="center"><a href="https://github.com/wjdgh224"><p><b>황정호</b></p></a><small>💻 Back-End Developer</small></td>
   </tr>
+</table>
+<table>
   <tr>
     <td align="center"><a href="https://github.com/nnoonjy"><p><b>문정윤</b></p></a><small>💻 Front-End Developer</small></td>
     <td align="center"><a href="https://github.com/wona825"><p><b>차지원</b></p></a><small>💻 Front-End Developer</small></td>
@@ -55,16 +57,25 @@
 
 <img src="https://user-images.githubusercontent.com/61836238/183280219-f1f5e1fd-5401-40f6-8ff2-b48e426b34f1.png" width="400" height="400" align='center'>
 <img src="https://user-images.githubusercontent.com/61836238/183280166-9a3202cd-d014-40c8-8436-1b6d34b5bb8f.png" width="400" height="400" align='center'> -->
-</div>
+
+
+
+![easy](https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/8f1fa968-d82c-4e79-8acb-0333d2f2d7aa)
 
 <br><hr><br>
 
 ## 4. 🛠 Tech Stack
 <p>
-<img src="https://img.shields.io/badge/kotlin-#7F52FF?style=for-the-badge&logo=kotline&logoColor=white"></br>
+<img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotline&logoColor=white"></br>
 </p>
 
 <p>
 <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"></br>
 </p>
+
+<p>
+<img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/>
+</p>
+
+</div>
