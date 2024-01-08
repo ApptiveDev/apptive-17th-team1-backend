@@ -44,6 +44,7 @@
 <img src="https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/8f1fa968-d82c-4e79-8acb-0333d2f2d7aa" width="300" height="500" align='center'>
 </div>
 
+[Goole play : Eazy 와인](https://play.google.com/store/apps/details?id=com.apptive.easywine)
 
 
 <br><hr><br>
