@@ -4,13 +4,15 @@
 <div align="center">
 <table>
   <tr>
-    <td align="center"><p><b>이현지</b></p></a><small>📚 기획</small></td>
+    <td align="center"><p><b>이현지</b></p></a><small>📚 Planner</small></td>
   </tr> 
 </table>   
 <table>
   <tr>
     <td align="center"><a href="https://github.com/mong3125"><p><b>김대길</b></p></a><small>💻 Back-End Developer</small></td>
-    <td align="center"><a href="https://github.com/wjdgh224"><p><b>황정호</b></p></a><small>💻 Back-End Developer</small></td><br>
+    <td align="center"><a href="https://github.com/wjdgh224"><p><b>황정호</b></p></a><small>💻 Back-End Developer</small></td>
+  </tr>
+  <tr>
     <td align="center"><a href="https://github.com/nnoonjy"><p><b>문정윤</b></p></a><small>💻 Front-End Developer</small></td>
     <td align="center"><a href="https://github.com/wona825"><p><b>차지원</b></p></a><small>💻 Front-End Developer</small></td>
     <td align="center"><a href="https://github.com/Kick-snare"><p><b>홍유준</b></p></a><small>💻 Front-End Developer</small></td>
@@ -18,7 +20,7 @@
 </table>
 <table>
   <tr>
-    <td align="center"><p><b>김문경</b></p><small>🎨 디자인</small><br/><small>horse6953@gmail.com</small></td>
+    <td align="center"><p><b>김문경</b></p><small>🎨 Designer</small><br/><small>horse6953@gmail.com</small></td>
   </tr> 
 </table>
 </div>
@@ -59,7 +61,7 @@
 
 ## 4. 🛠 Tech Stack
 <p>
-<img src="https://img.shields.io/badge/kotlin-#7F52FF?style=for-the-badge&logo=kotline&logoColor=black"></br>
+<img src="https://img.shields.io/badge/kotlin-#7F52FF?style=for-the-badge&logo=kotline&logoColor=white"></br>
 </p>
 
 <p>
