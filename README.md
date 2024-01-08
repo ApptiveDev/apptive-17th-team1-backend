@@ -26,41 +26,23 @@
   </tr> 
 </table>
 </div>
-
 <br><hr><br>
 
 ## 2. 서비스 소개
-<b>한줄 소개 : 초심자를 위한 와인 추천 앱</b><br/><br/>
+<b>한줄 소개 : 이지와인(EasyWine)은 와인 초보자들이 간단한 설문 조사를 통해 와인을 추천받고, 추천 받은 와인들을 모아 볼 수 있는 서비스 입니다.</b><br/><br/>
 <div>
-<!-- <img src="https://user-images.githubusercontent.com/61836238/183279216-9a5d9825-b338-43d6-8b05-e7b867f1e0a8.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183279268-59fa6c4f-51a9-4002-85ba-fbfafbade45e.png" width="400" height="400" align='center'><br><br>
-   
-<img src="https://user-images.githubusercontent.com/61836238/183279273-7991d12b-3ff8-401e-b73e-6bd0c31e7e0c.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183279276-515db365-1d2b-4864-97be-54152cb98f1a.png" width="400" height="400" align='center'><br><br>
-   
-<img src="https://user-images.githubusercontent.com/61836238/183279279-32170480-1aa8-4aa6-82c1-7faacc6dc328.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183279280-05b8a655-9c56-4673-a47b-429b99991fca.png" width="400" height="400" align='center'> -->
+![ew1](https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/143d2c6b-e929-44fd-b063-57ab754aa703)
+![ew2](https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/6c2e8acc-ef2f-43b1-b0fb-b7cf03fdbc06)
+![ew3](https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/254ac5d3-129b-4b62-91ab-a741275fe73c)
+![ew4](https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/06d2a9e5-fd04-42fa-a1c5-47189784fc65)
 </div>
 
 <br><hr><br>
 
 ## 3. 페이지
 <div>
-<!-- <img src="https://user-images.githubusercontent.com/61836238/183280109-27a4f208-1898-485b-8dca-d3ac4fbc0f47.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183280129-e4529fe7-184a-4f4f-ade8-82884907a572.png" width="400" height="400" align='center'><br><br>
-
-<img src="https://user-images.githubusercontent.com/61836238/183280132-6c8777c6-8afe-4bc6-a18e-9aaf7a134340.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183280139-0e929f18-51d4-4402-8669-9d2cafd1fab3.png" width="400" height="400" align='center'><br><br>
-
-<img src="https://user-images.githubusercontent.com/61836238/183280153-5ccfe08c-3ed0-4543-a20d-ff4c538b10f3.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183280161-ce6adb91-c3eb-4322-898a-9ca03e1841bb.png" width="400" height="400" align='center'><br><br>
-
-<img src="https://user-images.githubusercontent.com/61836238/183280219-f1f5e1fd-5401-40f6-8ff2-b48e426b34f1.png" width="400" height="400" align='center'>
-<img src="https://user-images.githubusercontent.com/61836238/183280166-9a3202cd-d014-40c8-8436-1b6d34b5bb8f.png" width="400" height="400" align='center'> -->
-
-
-
 ![easy](https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/8f1fa968-d82c-4e79-8acb-0333d2f2d7aa)
+</div>
 
 <br><hr><br>
 
@@ -78,4 +60,3 @@
 <img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/>
 </p>
 
-</div>
