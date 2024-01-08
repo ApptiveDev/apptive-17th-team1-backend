@@ -30,7 +30,7 @@
 
 ## 2. 서비스 소개
 <b>한줄 소개 : 이지와인(EasyWine)은 와인 초보자들이 간단한 설문 조사를 통해 와인을 추천받고, 추천 받은 와인들을 모아 볼 수 있는 서비스 입니다.</b><br/><br/>
-<div>
+<div align="center">
 <img src="https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/143d2c6b-e929-44fd-b063-57ab754aa703" width="300" height="600" align='center'>
 <img src="https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/6c2e8acc-ef2f-43b1-b0fb-b7cf03fdbc06" width="300" height="600" align='center'>
 <img src="https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/254ac5d3-129b-4b62-91ab-a741275fe73c" width="300" height="600" align='center'>
@@ -40,8 +40,8 @@
 <br><hr><br>
 
 ## 3. 페이지
-<div>
-<img src="https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/8f1fa968-d82c-4e79-8acb-0333d2f2d7aa" width="300" height="600" align='center'>
+<div align="center">
+<img src="https://github.com/ApptiveDev/apptive-17th-team1-backend/assets/78483046/8f1fa968-d82c-4e79-8acb-0333d2f2d7aa" width="300" height="500" align='center'>
 </div>
 
 
